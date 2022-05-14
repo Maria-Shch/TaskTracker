@@ -3,6 +3,7 @@ package ru.shcherbatykh.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ru.shcherbatykh.classes.Role;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class User {
     private String lastname;
     private String login;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userCreator")
     @ToString.Exclude
@@ -28,10 +31,11 @@ public class User {
     @ToString.Exclude
     private List<Task> tasksAssignedToUser = new ArrayList<>();
 
-    public User(String name, String lastname, String login, String password) {
+    public User(String name, String lastname, String login, String password, Role role) {
         this.name = name;
         this.lastname = lastname;
         this.login = login;
         this.password = password;
+        this.role = role;
     }
 }

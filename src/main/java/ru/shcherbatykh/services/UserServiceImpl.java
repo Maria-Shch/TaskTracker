@@ -2,6 +2,7 @@ package ru.shcherbatykh.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.shcherbatykh.classes.Role;
 import ru.shcherbatykh.models.User;
 import ru.shcherbatykh.repositories.UserRepository;
 
@@ -35,5 +36,10 @@ public class UserServiceImpl implements UserService{
     @Override @Transactional
     public void deleteUser(long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override @Transactional
+    public List<User> getUsersByRole(Role role) {
+        return userRepository.findByRole(role);
     }
 }

@@ -1,6 +1,7 @@
 package ru.shcherbatykh.services;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.shcherbatykh.classes.Role;
 import ru.shcherbatykh.models.User;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface UserService {
 
     @Transactional
     void deleteUser(long id);
+
+    @Transactional
+    List<User> getUsersByRole(Role role);
 }
