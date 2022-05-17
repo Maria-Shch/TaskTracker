@@ -18,7 +18,7 @@ public class User {
     private long id;
     private String name;
     private String lastname;
-    private String login;
+    private String username;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -31,10 +31,10 @@ public class User {
     @ToString.Exclude
     private List<Task> tasksAssignedToUser = new ArrayList<>();
 
-    public User(String name, String lastname, String login, String password, Role role) {
+    public User(String name, String lastname, String username, String password, Role role) {
         this.name = name;
         this.lastname = lastname;
-        this.login = login;
+        this.username = username;
         this.password = password;
         this.role = role;
     }
