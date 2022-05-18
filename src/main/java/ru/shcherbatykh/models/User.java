@@ -21,7 +21,7 @@ public class User {
     private String username;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userCreator")
     @ToString.Exclude
@@ -31,11 +31,10 @@ public class User {
     @ToString.Exclude
     private List<Task> tasksAssignedToUser = new ArrayList<>();
 
-    public User(String name, String lastname, String username, String password, Role role) {
+    public User(String name, String lastname, String username, String password) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 }

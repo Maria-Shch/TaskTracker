@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Create an account</title>
+    </head>
+    <body>
+        <div>
+            <form method="POST" modelAttribute="newUser">
+                <h2>Create your account</h2>
+                <p>
+                    <label for="Name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Name" required>
+                </p>
+
+                <p>
+                    <label for="lastname">Lastname</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Lastname" required>
+                </p>
+
+                <p>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </p>
+
+                <p>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </p>
+
+                <p>
+                    <label for="password">Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword"  placeholder="Confirm Password" required>
+                </p>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+            </form>
+        </div>
+    </body>
+</html>

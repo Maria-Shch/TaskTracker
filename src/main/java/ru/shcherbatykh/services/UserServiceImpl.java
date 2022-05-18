@@ -1,5 +1,8 @@
 package ru.shcherbatykh.services;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shcherbatykh.classes.Role;
@@ -12,9 +15,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override @Transactional
@@ -24,8 +29,9 @@ public class UserServiceImpl implements UserService{
 
     @Override @Transactional
     public void addUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        System.out.println("add user");
         userRepository.save(user);
-        //todo check non-repeatable login
     }
 
     @Override @Transactional
@@ -41,5 +47,11 @@ public class UserServiceImpl implements UserService{
     @Override @Transactional
     public List<User> getUsersByRole(Role role) {
         return userRepository.findByRole(role);
+    }
+
+    @Override @Transactional
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User doesn't exists"));
     }
 }

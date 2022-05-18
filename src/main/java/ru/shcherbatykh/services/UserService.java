@@ -21,4 +21,7 @@ public interface UserService {
 
     @Transactional
     List<User> getUsersByRole(Role role);
+
+    @Transactional
+    User findByUsername(String username);
 }
