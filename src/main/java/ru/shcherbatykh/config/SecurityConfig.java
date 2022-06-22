@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import ru.shcherbatykh.security.LoginSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,35 +23,37 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
+    private final LoginSuccessHandler loginSuccessHandler;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService) {
+    public SecurityConfig(UserDetailsService userDetailsService, LoginSuccessHandler loginSuccessHandler) {
         this.userDetailsService = userDetailsService;
+        this.loginSuccessHandler = loginSuccessHandler;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/auth/registration").permitAll()
-            .antMatchers("/auth/failSignIn").permitAll()
-            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //this line makes css styles work
-            .anyRequest()
-            .authenticated()
+                .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/auth/registration").permitAll()
+                .antMatchers("/auth/failSignIn").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //this line makes css styles work
+                .anyRequest()
+                .authenticated()
             .and()
-            .formLogin()
-            .loginPage("/auth/login").permitAll()
-            .defaultSuccessUrl("/auth/success")
-            .failureUrl("/auth/failureLogin")
+                .formLogin()
+                .loginPage("/auth/login").permitAll()
+                .successHandler(loginSuccessHandler)
+                .failureUrl("/auth/failureLogin")
             .and()
-            .logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
-            .invalidateHttpSession(true)
-            .clearAuthentication(true)
-            .deleteCookies("JSESSIONID")
-            .logoutSuccessUrl("/auth/login");
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/auth/login");
     }
 
     @Override

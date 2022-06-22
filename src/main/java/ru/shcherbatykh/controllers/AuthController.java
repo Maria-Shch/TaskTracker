@@ -4,7 +4,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.shcherbatykh.models.User;
 import ru.shcherbatykh.services.UserService;
 import ru.shcherbatykh.validator.UserValidator;
@@ -31,14 +34,6 @@ public class AuthController {
         return "failureLogin";
     }
 
-
-    @GetMapping("/success")
-    public String getSuccessPage() {
-        return "success";
-    }
-
-
-
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("newUser", new User());
@@ -50,19 +45,23 @@ public class AuthController {
         userValidator.validate(newUser, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
             return "registration";
         }
         userService.addUser(newUser);
         return "login";
     }
 
+    //todo delete
+    @GetMapping("/success")
+    public String getSuccessPage() {
+        return "success";
+    }
+    
     @GetMapping("/userRolePage")
     @PreAuthorize("hasAuthority('USER')")
     public String getUserRolePage() {
         return "userRolePage";
     }
-
 
     @GetMapping("/adminRolePage")
     @PreAuthorize("hasAuthority('ADMIN')")
