@@ -1,6 +1,7 @@
 package ru.shcherbatykh.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,12 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers("/auth/registration").permitAll()
+            .antMatchers("/auth/failSignIn").permitAll()
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //this line makes css styles work
             .anyRequest()
             .authenticated()
             .and()
             .formLogin()
             .loginPage("/auth/login").permitAll()
             .defaultSuccessUrl("/auth/success")
+            .failureUrl("/auth/failureLogin")
             .and()
             .logout()
             .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))

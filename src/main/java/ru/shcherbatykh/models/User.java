@@ -3,6 +3,7 @@ package ru.shcherbatykh.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.transaction.annotation.Transactional;
 import ru.shcherbatykh.classes.Role;
 
 import javax.persistence.*;
@@ -20,6 +21,8 @@ public class User {
     private String lastname;
     private String username;
     private String password;
+    @Transient
+    private String confirmPassword;
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 

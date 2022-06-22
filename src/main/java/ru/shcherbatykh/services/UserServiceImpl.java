@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService{
 
     @Override @Transactional
     public User findByUsername(String username){
-        return userRepository.findByUsername(username).orElseThrow(() ->
-                new UsernameNotFoundException("User doesn't exists"));
+        return userRepository.findByUsername(username).orElse(null);
     }
 }

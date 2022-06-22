@@ -1,0 +1,26 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Sign in</title>
+  <link th:href="@{/css/authentication.css}" href="../src/main/resources/static/css/authentication.css" rel="stylesheet">
+</head>
+  <body>
+    <div>
+      <form class="container" method="post" action="/auth/login">
+        <p class="header">SIGN IN</p>
+
+        <p class="p-error">The login or password is incorrect</p>
+
+        <input class="input-field" type="text" id="username" name="username" placeholder="Login" required>
+        <input class="input-field" type="password" id="password" name="password" placeholder="Password" required>
+
+        <button class="sign" type="submit">Sign in</button>
+      </form>
+
+      <form class="container" action="/auth/registration">
+        <input class="create-acc" type="submit" value="Create an account"/>
+      </form>
+    </div>
+  </body>
+</html>

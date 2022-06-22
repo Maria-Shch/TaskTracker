@@ -1,38 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
     <head>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
         <title>Create an account</title>
+        <link th:href="@{/css/authentication.css}" href="../src/main/resources/static/css/authentication.css" rel="stylesheet">
     </head>
     <body>
         <div>
-            <form method="POST" modelAttribute="newUser">
-                <h2>Create your account</h2>
-                <p>
-                    <label for="Name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Name" required>
-                </p>
+            <form class="container" method="POST" th:action="@{/auth/registration}" th:object="${newUser}">
+                <p class="header">SIGN UP</p>
 
-                <p>
-                    <label for="lastname">Lastname</label>
-                    <input type="text" id="lastname" name="lastname" placeholder="Lastname" required>
-                </p>
+                <input class="input-field" type="text" th:field="*{name}" placeholder="Name" required>
 
-                <p>
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Username" required>
-                </p>
+                <input class="input-field" type="text" th:field="*{lastname}"  placeholder="Lastname" required>
 
-                <p>
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-                </p>
+                <p th:if="${#fields.hasErrors('username')}"  th:errors="*{username}" class="p-error"></p>
 
-                <p>
-                    <label for="password">Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword"  placeholder="Confirm Password" required>
-                </p>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                <input class="input-field" type="text"  th:field="*{username}" placeholder="Login" required>
+
+                <p th:if="${#fields.hasErrors('confirmPassword')}"  th:errors="*{confirmPassword}" class="p-error"></p>
+
+                <input class="input-field" type="password"  th:field="*{password}" placeholder="Password" required>
+
+                <input class="input-field" type="password"  th:field="*{confirmPassword}" name="confirmPassword"  placeholder="Confirm password" required>
+
+                <button class="sign" type="submit">Create a new account</button>
+
+                <div class="text-cont">
+                    <p class="p-text">
+                        Have an account?&nbsp
+                    </p>
+                    <a class="p-text" href="/auth/login">
+                         Sign in
+                    </a>
+                </div>
             </form>
         </div>
     </body>

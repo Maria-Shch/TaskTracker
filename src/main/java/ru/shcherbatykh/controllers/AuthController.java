@@ -26,29 +26,36 @@ public class AuthController {
         return "login";
     }
 
+    @GetMapping("/failureLogin")
+    public String getFailureLoginPage() {
+        return "failureLogin";
+    }
+
+
     @GetMapping("/success")
     public String getSuccessPage() {
         return "success";
     }
 
+
+
     @GetMapping("/registration")
     public String registration(Model model) {
-        model.addAttribute("userForm", new User());
+        model.addAttribute("newUser", new User());
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User newUser, BindingResult bindingResult) {
+    public String registration(@ModelAttribute("newUser") User newUser, BindingResult bindingResult) {
         userValidator.validate(newUser, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "registration"; //todo something that say user about repeatable username
+            System.out.println(bindingResult.getAllErrors());
+            return "registration";
         }
         userService.addUser(newUser);
         return "login";
     }
-
-
 
     @GetMapping("/userRolePage")
     @PreAuthorize("hasAuthority('USER')")

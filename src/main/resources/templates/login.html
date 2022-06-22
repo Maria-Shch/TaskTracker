@@ -1,23 +1,24 @@
-<html lang="en">
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
     <head>
-        <meta charset="utf-8">
-        <title>Login Customer</title>
+        <meta charset="UTF-8">
+        <title>Sign in</title>
+        <link th:href="@{/css/authentication.css}" href="../src/main/resources/static/css/authentication.css" rel="stylesheet">
     </head>
     <body>
-        <div class="container">
-            <form class="form-signin" method="post" action="/auth/login">
-                <h2 class="form-signin-heading">Login</h2>
-                <p>
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
-                </p>
-                <p>
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                </p>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <div>
+            <form class="container" method="post" th:action="@{/auth/login}">
+                <p class="header">SIGN IN</p>
+
+                <input class="input-field" type="text" id="username" name="username" placeholder="Login" required>
+                <input class="input-field" type="password" id="password" name="password" placeholder="Password" required>
+
+                <button class="sign" type="submit">Sign in</button>
             </form>
-            <h4 class="text-center"><a href="/auth/registration">Create an account</a></h4>
+
+            <form class="container" action="/auth/registration">
+                <input class="create-acc" type="submit" value="Create an account"/>
+            </form>
         </div>
     </body>
 </html>
