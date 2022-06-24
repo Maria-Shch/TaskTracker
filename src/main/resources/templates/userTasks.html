@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tasks</title>
+    <link th:href="@{/css/tasks.css}" href="../src/main/resources/static/css/tasks.css" rel="stylesheet">
 </head>
-<body>
-<p>user tasks</p>
-</body>
+    <body>
+        <header class="header">
+            <div class="container">
+                <a class="title" href="/user/tasks">
+                    TASKS
+                </a>
+
+                <a class="title" href="/user/statistics">
+                    STATISTICS
+                </a>
+
+                <form action="/auth/logout" method="post">
+                    <input class="input-logout" type="submit" value="Sign out"/>
+                </form>
+            </div>
+        </header>
+        <div class="div-main-container">
+            <div class="div-title-container">
+                <div class="d-title">
+                    <p class="p-title">TITLE</p>
+                </div>
+                <div class="d-activity">
+                    <p class="p-title">ACTIVITY STATUS</p>
+                </div>
+                <div class="d-status">
+                    <p class="p-title">STATUS</p>
+                </div>
+                <div class="d-start-date">
+                    <p class="p-title">START DATE</p>
+                </div>
+                <div class="d-due-date">
+                    <p class="p-title">DUE DATE</p>
+                </div>
+                <div class="d-button"></div>
+            </div>
+            <div class="div-tasks-container">
+                <div class="div-task"  th:each="task : ${tasks}">
+                    <div class="d-task-title">
+                        <p class="p-task-title" th:text="${task.title}"> </p>
+                    </div>
+                    <div class="d-task-activity">
+                        <p class="p-active" th:if="${task.activityStatus == true}">ACTIVE</p>
+                        <p class="p-inactive" th:if="${task.activityStatus == false}">INACTIVE</p>
+                    </div>
+                    <div class="d-status">
+                        <p class="p-todo" th:if="${task.status.name() == 'TODO'}">TODO</p>
+                        <p class="p-accepted" th:if="${task.status.name() == 'ACCEPTED'}">ACCEPTED</p>
+                        <p class="p-in-progress" th:if="${task.status.name() == 'IN_PROGRESS'}">IN PROGRESS</p>
+                        <p class="p-done" th:if="${task.status.name() == 'DONE'}">DONE</p>
+                        <p class="p-canceled" th:if="${task.status.name() == 'CANCELED'}">CANCELED</p>
+                    </div>
+                    <div class="d-start-date">
+                        <p class="p-task-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateCreation)}"> </p>
+                    </div>
+                    <div class="d-due-date">
+                        <p class="p-task-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateDeadline)}"> </p>
+                    </div>
+                    <div class="d-button">
+                        <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == true}" th:action="@{'/task/' + ${task.id}} + '/disactivate'" method="get">
+                            <input class="input-disactivate" type="submit" value="Deactivate"/>
+                        </form>
+                        <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == false}" th:action="@{'/task/' + ${task.id}} + '/activate'" method="get">
+                            <input class="input-activate" type="submit" value="Activate"/>
+                        </form>
+                        <form th:if="${task.status.name() == 'TODO'}" th:action="@{'/task/' + ${task.id}} + '/accept'" method="get">
+                            <input class="input-accept" type="submit" value="Accept"/>
+                        </form>
+                    </div>
+                    <div class="d-more-task">
+                        <form  th:action="@{'/task/' + ${task.id}}"  method="get">
+                            <input class="input-task" type="submit" value=">"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
