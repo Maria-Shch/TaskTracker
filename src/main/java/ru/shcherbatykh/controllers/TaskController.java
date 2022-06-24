@@ -41,6 +41,11 @@ public class TaskController {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksAssignedToUser(user);
 
+        // When the user sets the activity status of the task to "true" (pressed the button "Activate"),
+        // it means that he has started working on this task. At one moment,
+        // the user can work on only one task -
+        // you should check if there is already an active task among his tasks.
+        // If it exists, you should make it inactive and only after that activate the task selected by the user.
         List<Task> activeTasks = tasks.stream()
                 .filter(task -> task.isActivityStatus())
                 .collect(Collectors.toList());
@@ -48,6 +53,9 @@ public class TaskController {
         activeTasks.stream().forEach(task -> taskService.setActivityStatus(task.getId(), false));
         taskService.setActivityStatus(id, true);
 
+        // If the user activated the task with the status "accepted",
+        // it means that he started working on it for the first time
+        // and after that it is required to change its status from "ACCEPTED" to "IN PROGRESS"
         if(taskService.getTask(id).getStatus() == Status.ACCEPTED) taskService.setStatus(id, Status.IN_PROGRESS);
 
         model.addAttribute("tasks", tasks);

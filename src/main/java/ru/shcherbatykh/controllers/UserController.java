@@ -32,7 +32,13 @@ public class UserController {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksAssignedToUser(user);
 
+        // This comparator sorts the list of tasks in the following way:
+        // the first task is the one with the activity status 'true'.
+        // Then all tasks with activity status "false" are sorted by ordinal of enum Status
+        // If two tasks have the same ordinal are sorted by title
         Collections.sort(tasks, (task1, task2) -> {
+            if (task1.isActivityStatus() == true) return -1;
+            if (task2.isActivityStatus() == true) return 1;
             if (task1.getStatus() == task2.getStatus()) {
                 return task1.getTitle().compareTo(task2.getTitle());
             } else {
