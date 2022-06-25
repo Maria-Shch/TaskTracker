@@ -44,20 +44,6 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override @Transactional
-    public void setActivityStatus(long id, boolean status){
-        Task task = taskRepository.getTaskById(id);
-        task.setActivityStatus(status);
-        taskRepository.save(task);
-    }
-
-    @Override @Transactional
-    public void setStatus(long id, Status status){
-        Task task = taskRepository.getTaskById(id);
-        task.setStatus(status);
-        taskRepository.save(task);
-    }
-
-    @Override @Transactional
     public List<Task> getTasksCreatedByUser(User user){
         return user.getTasksCreatedByUser();
     }

@@ -22,12 +22,6 @@ public interface TaskService {
     void deleteTask(long id);
 
     @Transactional
-    void setActivityStatus(long id, boolean status);
-
-    @Transactional
-    void setStatus(long id, Status status);
-
-    @Transactional
     List<Task> getTasksCreatedByUser(User user);
 
     @Transactional

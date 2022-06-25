@@ -31,7 +31,7 @@ public class TaskController {
     public String taskDisactivate(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks= taskService.getTasksAssignedToUser(user);
-        taskService.setActivityStatus(id, false);
+        taskService.updateActivityStatus(id, user,false);
         model.addAttribute("tasks", tasks);
         return "redirect:/user/tasks";
     }
@@ -50,13 +50,13 @@ public class TaskController {
                 .filter(task -> task.isActivityStatus())
                 .collect(Collectors.toList());
 
-        activeTasks.stream().forEach(task -> taskService.setActivityStatus(task.getId(), false));
-        taskService.setActivityStatus(id, true);
+        activeTasks.stream().forEach(task -> taskService.updateActivityStatus(task.getId(), user,false));
+        taskService.updateActivityStatus(id, user, true);
 
         // If the user activated the task with the status "accepted",
         // it means that he started working on it for the first time
         // and after that it is required to change its status from "ACCEPTED" to "IN PROGRESS"
-        if(taskService.getTask(id).getStatus() == Status.ACCEPTED) taskService.setStatus(id, Status.IN_PROGRESS);
+        if(taskService.getTask(id).getStatus() == Status.ACCEPTED) taskService.updateStatus(id, user, Status.IN_PROGRESS);
 
         model.addAttribute("tasks", tasks);
         return "redirect:/user/tasks";
@@ -67,7 +67,7 @@ public class TaskController {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksAssignedToUser(user);
 
-        taskService.setStatus(id, Status.ACCEPTED);
+        taskService.updateStatus(id, user, Status.ACCEPTED);
 
         model.addAttribute("tasks", tasks);
         return "redirect:/user/tasks";
