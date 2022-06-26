@@ -65,10 +65,12 @@ public class UserController {
         comments.sort(Comparator.comparing(Comment::getDate));
         List<Status> statuses = new ArrayList<>();
         if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
+        String textComment = "";
 
         model.addAttribute("statuses", statuses);
         model.addAttribute("task", task);
         model.addAttribute("comments", comments);
+        model.addAttribute("textComment", textComment);
         return "task";
     }
 

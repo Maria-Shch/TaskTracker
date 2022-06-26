@@ -162,6 +162,7 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    align-items: flex-end;
 }
 
 .d-comments-text{
@@ -440,4 +441,60 @@ body{
 .d-comment{
     background-color: #FFFFFF;
     margin: 10px 0px 10px 00px;
+}
+
+.div-add-comment{
+    width: 100%;
+}
+
+.form-add-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.t-area-comment{
+    width: 90%;
+    height: 60px;
+    color: rgba(0, 0, 0, 0.77);
+    font-size: 17px;
+    font-weight: normal;
+    margin: 0px 10px 0px 0px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border-color: #b2b2b25e;
+    outline: none;
+}
+
+.button-comment{
+    background-color: #E3475A;
+    border-radius: 30px;
+    margin: 0px 0px 0px 0px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 15px;
+    height: 25px;
+    width: 70px;
+    line-height: 10px;
+    list-style: none;
+    outline: none;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-comment:hover,
+.button-comment:focus {
+    background-color: #f0354c;
 }

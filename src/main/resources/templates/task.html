@@ -100,18 +100,24 @@
                 </div>
             </div>
         </div>
-        <div th:if="${comments.size != 0}" class="d-comments">
+        <div class="d-comments">
             <div class="d-comments-title">
                 <p class="p-task-title">Comments</p>
             </div>
-            <div class="d-comment" th:each="comment : ${comments}">
+            <div class="d-comment" th:if="${comments.size != 0}" th:each="comment : ${comments}">
                 <div class="d-comments-parameters">
                     <p class="p-user" th:text="${comment.user.name + ' ' + comment.user.lastname}"></p>
-                    <p class="p-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(comment.date)}"></p>
+                    <p class="p-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(comment.date)}"></p>
                 </div>
                 <div class="d-comments-text">
                     <p class="p-comment-text" th:text="${comment.text}"></p>
                 </div>
+            </div>
+            <div class="div-add-comment">
+                <form class="form-add-container" method="post"  th:action="@{'/task/' + ${task.id}} + '/addcomment'">
+                    <textarea class="t-area-comment" type="text" id="textComment" name="textComment"> </textarea>
+                    <button class="button-comment" type="submit">Send</button>
+                </form>
             </div>
         </div>
     </div>

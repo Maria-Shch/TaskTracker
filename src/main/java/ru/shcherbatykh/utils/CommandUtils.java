@@ -18,4 +18,14 @@ public class CommandUtils {
         int YY = localDateTime.getYear();
         return String.format("%02d.%02d.%02d", DD, MM, YY);
     }
+
+    public static String convertDateAndTimeToStringForPrint(LocalDateTime localDateTime){
+        int DD = localDateTime.getDayOfMonth();
+        int MM = localDateTime.getMonthValue();
+        int YY = localDateTime.getYear();
+
+        int HH = localDateTime.getHour();
+        int MN = localDateTime.getMinute();
+        return String.format("%02d.%02d.%02d %02d:%02d", DD, MM, YY, HH, MN);
+    }
 }

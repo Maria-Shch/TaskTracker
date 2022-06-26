@@ -324,7 +324,7 @@ body{
 
 .input-disactivate:hover,
 .input-disactivate:focus {
-    background-color: rgb(245 70 91);
+    background-color: #f0354c;
 }
 
 .input-activate{

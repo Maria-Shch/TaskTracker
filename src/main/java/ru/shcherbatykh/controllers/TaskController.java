@@ -4,27 +4,28 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.shcherbatykh.classes.Status;
+import ru.shcherbatykh.models.Comment;
 import ru.shcherbatykh.models.Task;
 import ru.shcherbatykh.models.User;
+import ru.shcherbatykh.services.CommentService;
 import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/task")
 public class TaskController {
     private final UserService userService;
     private final TaskService taskService;
+    private final CommentService commentService;
 
-    public TaskController(UserService userService, TaskService taskService) {
+    public TaskController(UserService userService, TaskService taskService, CommentService commentService) {
         this.userService = userService;
         this.taskService = taskService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/{id}/disactivate")
@@ -68,5 +69,15 @@ public class TaskController {
 
         model.addAttribute("tasks", tasks);
         return "redirect:/user/tasks";
+    }
+
+    @PostMapping("/{id}/addcomment")
+    public String taskAddComment(@ModelAttribute("textComment") String textComment, @AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
+        Task task = taskService.getTask(id);
+        User user = userService.findByUsername(userDetails.getUsername());
+        Comment comment = new Comment(task, user, textComment);
+        commentService.addComment(comment);
+        String url = "redirect:/user/task/" + id;
+        return url;
     }
 }
