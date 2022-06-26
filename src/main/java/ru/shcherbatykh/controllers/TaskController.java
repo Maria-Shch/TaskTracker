@@ -34,7 +34,7 @@ public class TaskController {
         List<Task> tasks= taskService.getTasksAssignedToUser(user);
         taskService.updateActivityStatus(id, user,false);
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/tasks";
+        return "redirect:/user/assignedTasks"; //todo а если активировлаи задачу из созданных задач
     }
 
     @GetMapping("/{id}/activate")
@@ -57,7 +57,7 @@ public class TaskController {
         if(taskService.getTask(id).getStatus() == Status.ACCEPTED) taskService.updateStatus(id, user, Status.IN_PROGRESS);
 
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/tasks";
+        return "redirect:/user/assignedTasks"; //todo а если активировлаи задачу из созданных задач
     }
 
     @GetMapping("/{id}/accept")
@@ -68,7 +68,7 @@ public class TaskController {
         taskService.updateStatus(id, user, Status.ACCEPTED);
 
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/tasks";
+        return "redirect:/user/assignedTasks"; //todo а если активировлаи задачу из созданных задач
     }
 
     @PostMapping("/{id}/addcomment")

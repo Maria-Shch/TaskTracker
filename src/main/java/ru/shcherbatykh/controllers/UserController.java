@@ -15,11 +15,12 @@ import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static ru.shcherbatykh.utils.CommandUtils.sortTasksByStatus;
 
 @Controller
 @RequestMapping("/user")
@@ -34,48 +35,48 @@ public class UserController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/assignedTasks")
     @PreAuthorize("hasAuthority('USER')")
-    public String getUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String getAssignedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksAssignedToUser(user);
-
-        // This comparator sorts the list of tasks in the following way:
-        // the first task is the one with the activity status 'true'.
-        // Then all tasks with activity status "false" are sorted by ordinal of enum Status
-        // If two tasks have the same ordinal are sorted by title
-        Collections.sort(tasks, (task1, task2) -> {
-            if (task1.isActivityStatus() == true) return -1;
-            if (task2.isActivityStatus() == true) return 1;
-            if (task1.getStatus() == task2.getStatus()) {
-                return task1.getTitle().compareTo(task2.getTitle());
-            } else {
-                return task1.getStatus().compareTo(task2.getStatus());
-            }
-        });
-
+        sortTasksByStatus(tasks);
         model.addAttribute("tasks", tasks);
-        return "userTasks";
+        return "assignedUserTasks";
+    }
+
+    @GetMapping("/createdTasks")
+    @PreAuthorize("hasAuthority('USER')")
+    public String getCreatedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        List<Task> tasks = taskService.getTasksCreatedByUser(user);
+        sortTasksByStatus(tasks);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("user", user);
+        return "createdUserTasks";
     }
 
     @GetMapping("/task/{id}")
-    public String getTaskPage(Model model, @PathVariable long id) {
+    public String getTaskPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
+        User user = userService.findByUsername(userDetails.getUsername());
         Task task = taskService.getTask(id);
         List<Comment> comments = commentService.getCommentsByTask(task);
         comments.sort(Comparator.comparing(Comment::getDate));
         List<Status> statuses = new ArrayList<>();
         if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
         String textComment = "";
+        String pathWhereReturnUser = "";
 
         model.addAttribute("statuses", statuses);
         model.addAttribute("task", task);
         model.addAttribute("comments", comments);
         model.addAttribute("textComment", textComment);
+        model.addAttribute("user", user);
         return "task";
     }
 
     @PostMapping("/task/{id}/changeStatus")
-    public String chageStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, @Valid Status selectedStatus) {
+    public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, @Valid Status selectedStatus) {
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateStatus(id, user, selectedStatus);
         return "redirect:/user/task/{id}";

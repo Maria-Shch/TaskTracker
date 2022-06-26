@@ -19,11 +19,10 @@ body{
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
-    align-content: flex-end;
 }
 
 .container{
-    width: 35%;
+    width: 50%;
     margin-right: 10%;
     display: flex;
     flex-direction: row;
@@ -36,7 +35,7 @@ body{
 .title{
     margin: 15px 0px 15px 0px;
     color: rgba(244, 244, 255, 0.86);
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -445,6 +444,7 @@ body{
 
 .div-add-comment{
     width: 100%;
+    margin: 10px 0px 0px 0px;
 }
 
 .form-add-container{

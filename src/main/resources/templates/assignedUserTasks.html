@@ -7,9 +7,16 @@
 </head>
     <body>
         <header class="header">
+            <div class="d-text-page">
+                <p class="title">Tasks assigned to you</p>
+            </div>
             <div class="container">
-                <a class="title" href="/user/tasks">
-                    TASKS
+                <a class="title" href="/user/assignedTasks">
+                    ASSIGNED TASKS
+                </a>
+
+                <a class="title" href="/user/createdTasks">
+                    CREATED TASKS
                 </a>
 
                 <a class="title" href="/user/statistics">
@@ -62,20 +69,22 @@
                     <div class="d-due-date">
                         <p class="p-task-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateDeadline)}"> </p>
                     </div>
-                    <div class="d-button">
-                        <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == true}" th:action="@{'/task/' + ${task.id}} + '/disactivate'" method="get">
-                            <input class="input-disactivate" type="submit" value="Deactivate"/>
-                        </form>
-                        <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == false}" th:action="@{'/task/' + ${task.id}} + '/activate'" method="get">
-                            <input class="input-activate" type="submit" value="Activate"/>
-                        </form>
-                        <form th:if="${task.status.name() == 'TODO'}" th:action="@{'/task/' + ${task.id}} + '/accept'" method="get">
-                            <input class="input-accept" type="submit" value="Accept"/>
-                        </form>
-                    </div>
                     <div class="d-more-task">
                         <form  th:action="@{'/user/task/' + ${task.id}}"  method="get">
                             <input class="input-task" type="submit" value=">"/>
+                        </form>
+                    </div>
+                    <div class="d-button">
+                        <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == true}"
+                              th:action="@{'/task/' + ${task.id}} + '/disactivate'" method="get">
+                            <input class="input-disactivate" type="submit" value="Deactivate"/>
+                        </form>
+                        <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == false}"
+                              th:action="@{'/task/' + ${task.id}} + '/activate'" method="get">
+                            <input class="input-activate"type="submit" value="Activate"/>
+                        </form>
+                        <form th:if="${task.status.name() == 'TODO'}" th:action="@{'/task/' + ${task.id}} + '/accept'" method="get">
+                            <input class="input-accept"  type="submit" value="Accept"/>
                         </form>
                     </div>
                 </div>
