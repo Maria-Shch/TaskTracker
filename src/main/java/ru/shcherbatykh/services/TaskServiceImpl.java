@@ -61,6 +61,18 @@ public class TaskServiceImpl implements TaskService{
                 .collect(Collectors.toList());
     }
 
+    @Override @Transactional
+    public void deactivateActiveUserTask(User user){
+        List<Task> tasks = getTasksAssignedToUser(user);
+
+        Task activeTask = tasks.stream()
+                .filter(task -> task.isActivityStatus())
+                .findFirst()
+                .orElse(null);
+
+        if (activeTask!=null) updateActivityStatus(activeTask.getId(), user,false);
+    }
+
     // All update methods are responsible for writing a row about update to the History table
     // HistoryService is used for this
     @Override @Transactional

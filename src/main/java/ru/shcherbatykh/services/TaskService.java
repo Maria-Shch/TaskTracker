@@ -30,6 +30,9 @@ public interface TaskService {
     @Transactional
     List<Task> getChildTasks(Task task);
 
+    @Transactional
+    void deactivateActiveUserTask(User user);
+
     // All update methods are responsible for writing a row about update to the History table
     // HistoryService is used for this
     @Transactional

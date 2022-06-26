@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.shcherbatykh.security.LoginSuccessHandler;
+import ru.shcherbatykh.security.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,11 +25,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final LoginSuccessHandler loginSuccessHandler;
+    private final LogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, LoginSuccessHandler loginSuccessHandler) {
+    public SecurityConfig(UserDetailsService userDetailsService, LoginSuccessHandler loginSuccessHandler, LogoutSuccessHandler logoutSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.loginSuccessHandler = loginSuccessHandler;
+        this.logoutSuccessHandler = logoutSuccessHandler;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/auth/login");
+                .logoutSuccessHandler(logoutSuccessHandler);
     }
 
     @Override
