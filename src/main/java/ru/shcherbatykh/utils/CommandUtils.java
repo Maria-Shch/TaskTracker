@@ -1,9 +1,11 @@
 package ru.shcherbatykh.utils;
 
 import ru.shcherbatykh.models.Task;
+import ru.shcherbatykh.models.User;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,5 +50,20 @@ public class CommandUtils {
                 return task1.getStatus().compareTo(task2.getStatus());
             }
         });
+    }
+
+    public static void sortUsersByLastnameAndName(List<User> users){
+        Collections.sort(users, (user1, user2) -> {
+            if (user1.getLastname().equals(user1.getLastname())) {
+                return user1.getName().compareTo(user2.getName());
+            } else {
+                return user1.getLastname().compareTo(user2.getLastname());
+            }
+        });
+    }
+
+    public static LocalDateTime convertLocalDateTimeFromString(String dateTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        return LocalDateTime.parse(dateTime, formatter);
     }
 }

@@ -13,7 +13,11 @@ import ru.shcherbatykh.services.CommentService;
 import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static ru.shcherbatykh.utils.CommandUtils.convertLocalDateTimeFromString;
+import static ru.shcherbatykh.utils.CommandUtils.sortUsersByLastnameAndName;
 
 @Controller
 @RequestMapping("/task")
@@ -72,12 +76,42 @@ public class TaskController {
     }
 
     @PostMapping("/{id}/addcomment")
-    public String taskAddComment(@ModelAttribute("textComment") String textComment, @AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
+    public String taskAddComment(@ModelAttribute("textComment") String textComment, @AuthenticationPrincipal UserDetails userDetails, @PathVariable long id) {
         Task task = taskService.getTask(id);
         User user = userService.findByUsername(userDetails.getUsername());
         Comment comment = new Comment(task, user, textComment);
         commentService.addComment(comment);
         String url = "redirect:/user/task/" + id;
         return url;
+    }
+
+    @GetMapping("/create")
+    public String createTask(Model model) {
+        List<User> users = userService.users();
+        sortUsersByLastnameAndName(users);
+        Long idUserExecutor = 0L;
+        String deadline = "";
+        model.addAttribute("newTask", new Task());
+        model.addAttribute("idUserExecutor", idUserExecutor);
+        model.addAttribute("deadline", deadline);
+        model.addAttribute("users", users);
+        return "taskCreate";
+    }
+
+    @PostMapping("/create")
+    public String createTask(@ModelAttribute("newTask") Task task, @ModelAttribute("idUserExecutor") Long idUserExecutor,
+                             @ModelAttribute("deadline") String deadline,
+                             @AuthenticationPrincipal UserDetails userDetails) {
+
+        User user = userService.findByUsername(userDetails.getUsername());
+        task.setUserCreator(user);
+        if (idUserExecutor != 0L) task.setUserExecutor(userService.getUser(idUserExecutor));
+        if (deadline.length()!=0){
+            LocalDateTime dateDeadline = convertLocalDateTimeFromString(deadline);
+            task.setDateDeadline(dateDeadline);
+        }
+
+        taskService.addTask(task);
+        return "redirect:/task/create";
     }
 }

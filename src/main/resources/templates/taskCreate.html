@@ -1,0 +1,47 @@
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+    <link th:href="@{/css/taskCreate.css}" href="../src/main/resources/static/css/taskCreate.css" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="d-text-page">
+        <p class="title" th:text="${title}"></p>
+    </div>
+    <div class="container">
+        <a class="title" href="/user/assignedTasks">
+            ASSIGNED TASKS
+        </a>
+
+        <a class="title" href="/user/createdTasks">
+            CREATED TASKS
+        </a>
+
+        <a class="title" href="/user/statistics">
+            STATISTICS
+        </a>
+
+        <form action="/auth/logout" method="post">
+            <input class="input-logout" type="submit" value="Sign out"/>
+        </form>
+    </div>
+</header>
+<div class="div-main-container">
+    <form class="form-container" method="post" th:action="@{/task/create}">
+        <input class="input-field" type="text" id="title" name="title" placeholder="Title" required>
+        <textarea class="t-area-field" type="text" id="description" name="description" placeholder="Description" required></textarea>
+        <select class="select-user" name="idUserExecutor">
+            <option th:value=${0} th:text="'User executor'"></option>
+            <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
+        </select>
+        <div class="div-date">
+            <label class="label-date" for="deadline">Дата и время: </label>
+            <input class="input-date" type="datetime-local" id="deadline" name="deadline"/>
+        </div>
+        <button class="b-create" type="submit">Create</button>
+    </form>
+</div>
+</body>
+</html>

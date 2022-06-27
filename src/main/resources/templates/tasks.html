@@ -45,7 +45,11 @@
         <div class="d-due-date">
             <p class="p-title">DUE DATE</p>
         </div>
-        <div class="d-tail"></div>
+        <div class="d-tail">
+            <a class="p-create-task" href="/task/create">
+                CREATE TASK
+            </a>
+        </div>
     </div>
     <div class="div-tasks-container">
         <div class="div-task"  th:each="task : ${tasks}">

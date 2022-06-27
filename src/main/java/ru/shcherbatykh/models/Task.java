@@ -35,12 +35,7 @@ public class Task{
     @Column(name = "status")
     private Status status = Status.TODO;
 
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "status_id")
-//    private Status status = new Status("To Do");
-
     @Column(name = "date_deadline")
-    @CreationTimestamp
     private LocalDateTime dateDeadline;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

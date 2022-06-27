@@ -146,6 +146,11 @@ body{
 .d-tail{
     width: 15%;
     margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .d-button{
@@ -169,6 +174,14 @@ body{
 
 .p-title{
     color: #2D4B66;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 15px 0px 15px 0px;
+    padding: 0px 5px 0px 5px;
+}
+
+.p-create-task{
+    color: #4e79a0eb;
     font-size: 16px;
     font-weight: bold;
     margin: 15px 0px 15px 0px;
