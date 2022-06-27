@@ -29,7 +29,7 @@
     </div>
 </header>
 <div class="div-main-container">
-    <form class="form-container" method="post" th:action="@{/task/create}">
+    <form class="form-container" method="post" th:action="@{/task/create/{idParentTask}(idParentTask=${idParentTask})}">
         <input class="input-field" type="text" id="title" name="title" placeholder="Title" required>
         <textarea class="t-area-field" type="text" id="description" name="description" placeholder="Description" required></textarea>
         <select class="select-user" name="idUserExecutor">

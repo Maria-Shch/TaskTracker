@@ -90,6 +90,18 @@ body{
     flex-wrap: nowrap;
     margin: 20px 0px 0px 0px;
     padding: 0px 20px 0px 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.a-title{
+    color: #4e79a0eb;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px 5px 0px 5px;
+    width: 15%;
 }
 
 .d-description{
@@ -176,6 +188,7 @@ body{
     font-size: 20px;
     font-weight: bold;
     margin: 0px 00px 0px 0px;
+    width: 85%;
 }
 
 .p-task-description{

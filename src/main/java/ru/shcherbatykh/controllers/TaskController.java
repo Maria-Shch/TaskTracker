@@ -85,26 +85,35 @@ public class TaskController {
         return url;
     }
 
-    @GetMapping("/create")
-    public String createTask(Model model) {
+    @GetMapping("/create/{idParentTask}")
+    public String createTask(Model model, @PathVariable long idParentTask) {
         List<User> users = userService.users();
         sortUsersByLastnameAndName(users);
         Long idUserExecutor = 0L;
         String deadline = "";
         model.addAttribute("newTask", new Task());
         model.addAttribute("idUserExecutor", idUserExecutor);
+        model.addAttribute("idParentTask", idParentTask);
         model.addAttribute("deadline", deadline);
         model.addAttribute("users", users);
         return "taskCreate";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{idParentTask}")
     public String createTask(@ModelAttribute("newTask") Task task, @ModelAttribute("idUserExecutor") Long idUserExecutor,
-                             @ModelAttribute("deadline") String deadline,
+                             @ModelAttribute("deadline") String deadline, @PathVariable long idParentTask,
                              @AuthenticationPrincipal UserDetails userDetails) {
 
         User user = userService.findByUsername(userDetails.getUsername());
         task.setUserCreator(user);
+
+        System.out.println(idParentTask);
+
+        if(idParentTask != 0L){
+            Task parentTask = taskService.getTask(idParentTask);
+            task.setParentTask(parentTask);
+        }
+
         if (idUserExecutor != 0L) task.setUserExecutor(userService.getUser(idUserExecutor));
         if (deadline.length()!=0){
             LocalDateTime dateDeadline = convertLocalDateTimeFromString(deadline);
@@ -112,6 +121,6 @@ public class TaskController {
         }
 
         taskService.addTask(task);
-        return "redirect:/task/create";
+        return "redirect:/user/createdTasks";
     }
 }

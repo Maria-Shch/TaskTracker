@@ -28,6 +28,10 @@
         <div class="d-container-main">
             <div class="d-title">
                 <p class="p-task-title" th:text="${task.title}"> </p>
+
+                <a class="a-title" th:href="@{'~/task/create/' + ${task.id}}">
+                    CREATE SUBTASK
+                </a>
             </div>
             <div class="d-description">
                 <p class="p-task-description" th:text="${task.description}"></p>

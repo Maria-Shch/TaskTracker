@@ -46,7 +46,7 @@
             <p class="p-title">DUE DATE</p>
         </div>
         <div class="d-tail">
-            <a class="p-create-task" href="/task/create">
+            <a class="p-create-task" href="/task/create/0">
                 CREATE TASK
             </a>
         </div>
@@ -92,6 +92,8 @@
                 </form>
             </div>
             <div class="d-button" th:if="${task.userExecutor != null} and ${user.id != task.userExecutor.id}">
+            </div>
+            <div class="d-button" th:if="${task.userExecutor == null}">
             </div>
         </div>
     </div>
