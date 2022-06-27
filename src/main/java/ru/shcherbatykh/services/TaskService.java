@@ -37,7 +37,7 @@ public interface TaskService {
     void deactivateActiveUserTask(User user);
 
     @Transactional
-    List<Task> getTasksInHierarchicalOrder(List<Task> tasks);
+    List<Task> getTasksInHierarchicalOrder();
 
     // All update methods are responsible for writing a row about update to the History table
     // HistoryService is used for this

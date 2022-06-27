@@ -13,6 +13,7 @@ import ru.shcherbatykh.services.CommentService;
 import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -122,5 +123,12 @@ public class TaskController {
 
         taskService.addTask(task);
         return "redirect:/user/createdTasks";
+    }
+
+    @PostMapping("/{id}/changeStatus")
+    public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, @Valid Status selectedStatus) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        taskService.updateStatus(id, user, selectedStatus);
+        return "redirect:/user/task/{id}";
     }
 }

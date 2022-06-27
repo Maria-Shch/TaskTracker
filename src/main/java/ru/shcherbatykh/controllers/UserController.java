@@ -16,8 +16,7 @@ import ru.shcherbatykh.services.UserService;
 
 import javax.validation.Valid;
 import java.util.*;
-
-import static ru.shcherbatykh.utils.CommandUtils.sortTasksByStatus;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -32,14 +31,30 @@ public class UserController {
         this.commentService = commentService;
     }
 
+    @GetMapping("/allTasks/{typeTasks}")
+    @PreAuthorize("hasAuthority('USER')")
+    public String getAllTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable String typeTasks) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+
+        model.addAttribute("typeTasks", typeTasks);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("user", user);
+        model.addAttribute("title", "All tasks");
+        return "tasks";
+    }
+
     @GetMapping("/assignedTasks")
     @PreAuthorize("hasAuthority('USER')")
     public String getAssignedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
-        List<Task> tasks = taskService.getTasksAssignedToUser(user);
-        List<Task> resultTaskList = taskService.getTasksInHierarchicalOrder(tasks);
-        model.addAttribute("user", user);
+        List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+        List<Task> resultTaskList = tasks.stream()
+                .filter(task -> task.getUserExecutor() == user)
+                .collect(Collectors.toList());
+
         model.addAttribute("tasks", resultTaskList);
+        model.addAttribute("user", user);
         model.addAttribute("title", "Tasks assigned to you");
         return "tasks";
     }
@@ -48,8 +63,11 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     public String getCreatedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
-        List<Task> tasks = taskService.getTasksCreatedByUser(user);
-        List<Task> resultTaskList = taskService.getTasksInHierarchicalOrder(tasks);
+        List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+        List<Task> resultTaskList = tasks.stream()
+                .filter(task -> task.getUserCreator() == user)
+                .collect(Collectors.toList());
+
         model.addAttribute("tasks", resultTaskList);
         model.addAttribute("user", user);
         model.addAttribute("title", "Tasks created by you");

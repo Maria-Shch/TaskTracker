@@ -11,6 +11,10 @@
         <p class="title" th:text="${title}"></p>
     </div>
     <div class="container">
+        <a class="title" href="/user/allTasks/all">
+            ALL TASKS
+        </a>
+
         <a class="title" href="/user/assignedTasks">
             ASSIGNED TASKS
         </a>
@@ -29,6 +33,17 @@
     </div>
 </header>
 <div class="div-main-container">
+    <div class="div-buttons-tasks"  th:if="${typeTasks != null}">
+        <form  th:action="@{/user/allTasks/{typeTasks}(typeTasks='all')}" method="get">
+            <input class="input-all"  type="submit" value="All"/>
+        </form>
+        <form  th:action="@{/user/allTasks/{typeTasks}(typeTasks='assigned')}" method="get">
+            <input class="input-assigned"  type="submit" value="Assigned"/>
+        </form>
+        <form  th:action="@{/user/allTasks/{typeTasks}(typeTasks='created')}" method="get">
+            <input class="input-created"  type="submit" value="Created"/>
+        </form>
+    </div>
     <div class="div-title-container">
         <div class="d-title">
             <p class="p-title">TITLE</p>
@@ -52,7 +67,10 @@
         </div>
     </div>
     <div class="div-tasks-container">
-        <div class="div-task"  th:each="task : ${tasks}" th:style="'width:' + @{${100-task.space}} + '%'">
+        <div class="div-task" th:each="task : ${tasks}" th:style="'width:' + @{${100-task.space}} + '%'"
+            th:classappend="${(({typeTasks == 'created'} and {task.userCreator ==  user})? 'div-task-created' : '') +
+                              ({typeTasks == 'assigned'} and {task.userExecutor ==  user} ? 'div-task-assigned' : '') +
+                              (typeTasks == 'all' ? 'div-task' : '')}">
             <div class="d-task-title"  th:style="'width:' + @{${35-task.space}} + '%'">
                 <p class="p-task-title" th:text="${task.title}"> </p>
             </div>

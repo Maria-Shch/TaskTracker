@@ -28,7 +28,7 @@ body{
 }
 
 .container{
-    width: 50%;
+    width: 60%;
     margin-right: 10%;
     display: flex;
     flex-direction: row;
@@ -41,7 +41,7 @@ body{
 .title{
     margin: 15px 0px 15px 0px;
     color: rgba(244, 244, 255, 0.86);
-    font-size: 25px;
+    font-size: 22px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -86,6 +86,7 @@ body{
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
+    align-items: center;
 }
 
 .div-title-container{
@@ -194,6 +195,7 @@ body{
     flex-wrap: nowrap;
     margin-top: 10px;
     align-items: flex-end;
+    border-left: solid #4E79A0 2px;
 }
 
 .div-task{
@@ -202,7 +204,34 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.div-buttons-tasks{
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    margin-bottom: 5px;
+}
+
+.div-task-assigned{
+    width: 100%;
+    background-color: #ffffde;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+}
+
+.div-task-created{
+    width: 100%;
+    background-color: #84a9f970;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
 }
 
 .d-task-title{
@@ -436,4 +465,97 @@ body{
 .input-task:hover,
 .input-task:focus {
     background-color: rgb(103, 135, 152);
+}
+
+.input-all{
+    background-color: #f0354c;
+    border-radius: 30px;
+    margin-top: 15px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    height: 30px;
+    width: 115px;
+    line-height: 10px;
+    list-style: none;
+    outline: none;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.input-all:hover,
+.input-all:focus {
+    background-color: #a0a0a0;
+}
+
+.input-assigned{
+    background-color: #f0354c;
+    border-radius: 30px;
+    margin-top: 15px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    height: 30px;
+    width: 115px;
+    line-height: 10px;
+    list-style: none;
+    outline: none;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.input-assigned:hover,
+.input-assigned:focus {
+    background-color: #f3cb43;
+}
+
+.input-created{
+    background-color: #f0354c;
+    border-radius: 30px;
+    margin-top: 15px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    height: 30px;
+    width: 115px;
+    line-height: 10px;
+    list-style: none;
+    outline: none;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.input-created:hover,
+.input-created:focus {
+    background-color: #88a4da;
 }

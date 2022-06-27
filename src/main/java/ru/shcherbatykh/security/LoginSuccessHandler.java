@@ -29,7 +29,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
         if (userDetails.getAuthorities().equals(Role.ADMIN.getAuthorities()))
             super.setDefaultTargetUrl("/admin/tasks");
-        else super.setDefaultTargetUrl("/user/assignedTasks");
+        else super.setDefaultTargetUrl("/user/allTasks/all");
 
         super.onAuthenticationSuccess(request, response, authentication);
     }

@@ -84,9 +84,11 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override @Transactional
-    public List<Task> getTasksInHierarchicalOrder(List<Task> tasks){
-        List<Task> rootTasks = tasks.stream()
-                .filter(task -> task.getParentTask()==null)
+    public List<Task> getTasksInHierarchicalOrder(){
+        List<Task> allTasks = getTasks();
+
+        List<Task> rootTasks = allTasks.stream()
+                .filter(task -> task.getParentTask() == null)
                 .collect(Collectors.toList());
 
         List<Task> mainRootTasks = new ArrayList<>(rootTasks);
@@ -102,7 +104,7 @@ public class TaskServiceImpl implements TaskService{
         // Depth-First Search of task-tree
         while(deque.size() != 0){
             Task task = deque.pop();
-            resultList.add(task);
+             resultList.add(task);
 
             if (getFirstChildTasks(task).size()!=0){
 
@@ -117,7 +119,7 @@ public class TaskServiceImpl implements TaskService{
                 sortTasksByStatus(firstChildTasks);
 
                 for (int i = firstChildTasks.size()-1; i >=0 ; i--) {
-                    deque.push(firstChildTasks.get(i));
+                     deque.push(firstChildTasks.get(i));
                 }
             }
         }

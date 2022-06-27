@@ -9,6 +9,10 @@
         <header class="header">
             <div class="container">
                 <a class="title" href="/user/assignedTasks">
+                    ALL TASKS
+                </a>
+
+                <a class="title" href="/user/assignedTasks">
                     ASSIGNED TASKS
                 </a>
 
@@ -102,7 +106,7 @@
                             <p class="p-parameter">Change status</p>
                         </div>
                         <div class="d-change-status">
-                            <form th:action="@{'/user/task/' + ${task.id}} + '/changeStatus'" th:method="post">
+                            <form th:action="@{'/task/' + ${task.id}} + '/changeStatus'" th:method="post">
                                 <select class="form-control" name="selectedStatus">
                                     <option th:each="status : ${statuses}" th:value="${status.name}" th:text="${status.name}"></option>
                                 </select>
