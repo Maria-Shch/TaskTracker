@@ -8,7 +8,7 @@
 <body>
 <header class="header">
     <div class="d-text-page">
-        <p class="title">Tasks created by you</p>
+        <p class="title" th:text="${title}"></p>
     </div>
     <div class="container">
         <a class="title" href="/user/assignedTasks">
@@ -81,10 +81,10 @@
                 </form>
                 <form th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == false}"
                       th:action="@{'/task/' + ${task.id}} + '/activate'" method="get">
-                    <input class="input-activate" type="submit" value="Activate"/>
+                    <input class="input-activate"type="submit" value="Activate"/>
                 </form>
                 <form th:if="${task.status.name() == 'TODO'}" th:action="@{'/task/' + ${task.id}} + '/accept'" method="get">
-                    <input class="input-accept" type="submit" value="Accept"/>
+                    <input class="input-accept"  type="submit" value="Accept"/>
                 </form>
             </div>
         </div>

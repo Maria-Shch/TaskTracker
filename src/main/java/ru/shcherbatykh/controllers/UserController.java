@@ -16,7 +16,6 @@ import ru.shcherbatykh.services.UserService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,7 +41,9 @@ public class UserController {
         List<Task> tasks = taskService.getTasksAssignedToUser(user);
         sortTasksByStatus(tasks);
         model.addAttribute("tasks", tasks);
-        return "assignedUserTasks";
+        model.addAttribute("user", user);
+        model.addAttribute("title", "Tasks assigned to you");
+        return "tasks";
     }
 
     @GetMapping("/createdTasks")
@@ -53,19 +54,26 @@ public class UserController {
         sortTasksByStatus(tasks);
         model.addAttribute("tasks", tasks);
         model.addAttribute("user", user);
-        return "createdUserTasks";
+        model.addAttribute("title", "Tasks created by you");
+        return "tasks";
     }
 
     @GetMapping("/task/{id}")
+    @PreAuthorize("hasAuthority('USER')")
     public String getTaskPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
         User user = userService.findByUsername(userDetails.getUsername());
         Task task = taskService.getTask(id);
         List<Comment> comments = commentService.getCommentsByTask(task);
         comments.sort(Comparator.comparing(Comment::getDate));
         List<Status> statuses = new ArrayList<>();
+
+        // A user to whom the task is assigned can change its status from status IN_PROGRESS to status DONE
         if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
+
+        // A user with the role USER can change the status a task to CANCELED if he is its CREATOR
+        if(task.getUserCreator().getId() == user.getId()) statuses.add(Status.CANCELED);
+
         String textComment = "";
-        String pathWhereReturnUser = "";
 
         model.addAttribute("statuses", statuses);
         model.addAttribute("task", task);
