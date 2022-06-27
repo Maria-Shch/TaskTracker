@@ -26,18 +26,18 @@ public class AuthController {
 
     @GetMapping("/login")
     public String getLoginPage() {
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/failureLogin")
     public String getFailureLoginPage() {
-        return "failureLogin";
+        return "auth/failureLogin";
     }
 
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("newUser", new User());
-        return "registration";
+        return "auth/registration";
     }
 
     @PostMapping("/registration")
@@ -48,30 +48,6 @@ public class AuthController {
             return "registration";
         }
         userService.addUser(newUser);
-        return "login";
-    }
-
-    //todo delete
-    @GetMapping("/success")
-    public String getSuccessPage() {
-        return "success";
-    }
-    
-    @GetMapping("/userRolePage")
-    @PreAuthorize("hasAuthority('USER')")
-    public String getUserRolePage() {
-        return "userRolePage";
-    }
-
-    @GetMapping("/adminRolePage")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String getAdminRolePage() {
-        return "adminRolePage";
-    }
-
-    @GetMapping("/allRoles")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public String getAllRolesPage() {
-        return "allRoles";
+        return "auth/login";
     }
 }
