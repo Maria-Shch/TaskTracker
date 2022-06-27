@@ -9,8 +9,13 @@ import ru.shcherbatykh.repositories.TaskRepository;
 import ru.shcherbatykh.classes.UpdatableTaskField;
 
 import java.time.LocalDateTime;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.shcherbatykh.utils.CommandUtils.sortTasksByStatus;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -54,11 +59,16 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override @Transactional
-    public List<Task> getChildTasks(Task task){
+    public List<Task> getAllChildTasks(Task task){
         List<Long> ids = taskRepository.getIdsChildTasks(task.getId());
         return ids.stream()
                 .map(id -> this.getTask(id))
                 .collect(Collectors.toList());
+    }
+
+    @Override @Transactional
+    public List<Task> getFirstChildTasks(Task task) {
+        return taskRepository.getTasksByParentTask(task);
     }
 
     @Override @Transactional
@@ -71,6 +81,48 @@ public class TaskServiceImpl implements TaskService{
                 .orElse(null);
 
         if (activeTask!=null) updateActivityStatus(activeTask.getId(), user,false);
+    }
+
+    @Override @Transactional
+    public List<Task> getTasksInHierarchicalOrder(List<Task> tasks){
+        List<Task> rootTasks = tasks.stream()
+                .filter(task -> task.getParentTask()==null)
+                .collect(Collectors.toList());
+
+        List<Task> mainRootTasks = new ArrayList<>(rootTasks);
+        List<Task> resultList = new ArrayList<>();
+
+        sortTasksByStatus(mainRootTasks);
+
+        Deque<Task> deque = new ArrayDeque();
+        for (int i = mainRootTasks.size()-1; i >=0 ; i--) {
+            deque.push(mainRootTasks.get(i));
+        }
+
+        // Depth-First Search of task-tree
+        while(deque.size() != 0){
+            Task task = deque.pop();
+            resultList.add(task);
+
+            if (getFirstChildTasks(task).size()!=0){
+
+                List<Task> allChildTask = getAllChildTasks(task);
+
+                for(Task task_:allChildTask) {
+                    int space = task_.getSpace();
+                    task_.setSpace(space+1);
+                }
+
+                List<Task> firstChildTasks = getFirstChildTasks(task);
+                sortTasksByStatus(firstChildTasks);
+
+                for (int i = firstChildTasks.size()-1; i >=0 ; i--) {
+                    deque.push(firstChildTasks.get(i));
+                }
+            }
+        }
+
+        return resultList;
     }
 
     // All update methods are responsible for writing a row about update to the History table

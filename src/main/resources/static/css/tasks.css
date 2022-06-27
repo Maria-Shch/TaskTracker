@@ -18,7 +18,6 @@ body{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
 }
 
 .d-text-page{
@@ -87,7 +86,6 @@ body{
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: center;
 }
 
 .div-title-container{
@@ -99,7 +97,7 @@ body{
 }
 
 .d-title{
-    width: 33%;
+    width: 35%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -160,6 +158,7 @@ body{
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+    margin-right: 10px;
 }
 
 .d-more-task{
@@ -194,6 +193,7 @@ body{
     flex-direction: column;
     flex-wrap: nowrap;
     margin-top: 10px;
+    align-items: flex-end;
 }
 
 .div-task{
@@ -206,7 +206,7 @@ body{
 }
 
 .d-task-title{
-    width: 33%;
+    width: 35%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

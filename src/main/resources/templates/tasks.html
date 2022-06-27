@@ -52,8 +52,8 @@
         </div>
     </div>
     <div class="div-tasks-container">
-        <div class="div-task"  th:each="task : ${tasks}">
-            <div class="d-task-title">
+        <div class="div-task"  th:each="task : ${tasks}" th:style="'width:' + @{${100-task.space}} + '%'">
+            <div class="d-task-title"  th:style="'width:' + @{${35-task.space}} + '%'">
                 <p class="p-task-title" th:text="${task.title}"> </p>
             </div>
             <div class="d-task-activity">
@@ -90,6 +90,8 @@
                 <form th:if="${task.status.name() == 'TODO'}" th:action="@{'/task/' + ${task.id}} + '/accept'" method="get">
                     <input class="input-accept"  type="submit" value="Accept"/>
                 </form>
+            </div>
+            <div class="d-button" th:if="${task.userExecutor != null} and ${user.id != task.userExecutor.id}">
             </div>
         </div>
     </div>

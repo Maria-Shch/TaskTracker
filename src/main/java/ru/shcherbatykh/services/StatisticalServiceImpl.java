@@ -25,7 +25,7 @@ public class StatisticalServiceImpl implements StatisticalService {
 
     @Override  @Transactional
     public Long getTimeInMillisSpentByUserOnTaskForPeriod(Task rootTask, User user, LocalDateTime startOfPeriod, LocalDateTime finishOfPeriod){
-        List<Task> tasks = taskService.getChildTasks(rootTask);
+        List<Task> tasks = taskService.getAllChildTasks(rootTask);
         tasks.add(rootTask);
 
         List<History> histories = new ArrayList<>();

@@ -28,10 +28,16 @@ public interface TaskService {
     List<Task> getTasksAssignedToUser(User user);
 
     @Transactional
-    List<Task> getChildTasks(Task task);
+    List<Task> getAllChildTasks(Task task);
+
+    @Transactional
+    List<Task> getFirstChildTasks(Task task);
 
     @Transactional
     void deactivateActiveUserTask(User user);
+
+    @Transactional
+    List<Task> getTasksInHierarchicalOrder(List<Task> tasks);
 
     // All update methods are responsible for writing a row about update to the History table
     // HistoryService is used for this

@@ -25,4 +25,6 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
             "SELECT * FROM r;",
             nativeQuery = true)
     List<Long> getIdsChildTasks(@Param("id") long id);
+
+    List<Task> getTasksByParentTask(Task parentTask);
 }

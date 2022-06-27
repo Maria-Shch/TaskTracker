@@ -45,6 +45,9 @@ public class Task{
     @Column(name = "activity_status")
     private boolean activityStatus = false;
 
+    @Transient
+    private int space = 0; // Field for indenting a task on the page (to demonstrate the hierarchy of tasks)
+
     public Task(String title, String description, User userCreator, User userExecutor,
                 LocalDateTime dateDeadline, Task parentTask) {
         this.title = title;

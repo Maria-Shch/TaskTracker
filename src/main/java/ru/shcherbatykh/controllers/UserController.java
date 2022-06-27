@@ -15,9 +15,7 @@ import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static ru.shcherbatykh.utils.CommandUtils.sortTasksByStatus;
 
@@ -39,9 +37,9 @@ public class UserController {
     public String getAssignedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksAssignedToUser(user);
-        sortTasksByStatus(tasks);
-        model.addAttribute("tasks", tasks);
+        List<Task> resultTaskList = taskService.getTasksInHierarchicalOrder(tasks);
         model.addAttribute("user", user);
+        model.addAttribute("tasks", resultTaskList);
         model.addAttribute("title", "Tasks assigned to you");
         return "tasks";
     }
@@ -51,8 +49,8 @@ public class UserController {
     public String getCreatedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksCreatedByUser(user);
-        sortTasksByStatus(tasks);
-        model.addAttribute("tasks", tasks);
+        List<Task> resultTaskList = taskService.getTasksInHierarchicalOrder(tasks);
+        model.addAttribute("tasks", resultTaskList);
         model.addAttribute("user", user);
         model.addAttribute("title", "Tasks created by you");
         return "tasks";
