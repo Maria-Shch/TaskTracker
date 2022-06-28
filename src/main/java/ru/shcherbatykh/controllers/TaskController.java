@@ -15,7 +15,10 @@ import ru.shcherbatykh.services.UserService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.shcherbatykh.utils.CommandUtils.convertLocalDateTimeFromString;
 import static ru.shcherbatykh.utils.CommandUtils.sortUsersByLastnameAndName;
@@ -39,7 +42,7 @@ public class TaskController {
         List<Task> tasks= taskService.getTasksAssignedToUser(user);
         taskService.updateActivityStatus(id, user,false);
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/task/{id}";
+        return "redirect:/task/{id}";
     }
 
     @GetMapping("/{id}/activate")
@@ -62,7 +65,7 @@ public class TaskController {
         if(taskService.getTask(id).getStatus() == Status.ACCEPTED) taskService.updateStatus(id, user, Status.IN_PROGRESS);
 
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/task/{id}";
+        return "redirect:/task/{id}";
     }
 
     @GetMapping("/{id}/accept")
@@ -73,7 +76,7 @@ public class TaskController {
         taskService.updateStatus(id, user, Status.ACCEPTED);
 
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/task/{id}";
+        return "redirect:/task/{id}";
     }
 
     @PostMapping("/{id}/addcomment")
@@ -82,7 +85,7 @@ public class TaskController {
         User user = userService.findByUsername(userDetails.getUsername());
         Comment comment = new Comment(task, user, textComment);
         commentService.addComment(comment);
-        return "redirect:/user/task/{id}";
+        return "redirect:/task/{id}";
     }
 
     @GetMapping("/create/{idParentTask}")
@@ -121,20 +124,85 @@ public class TaskController {
         }
 
         taskService.addTask(task);
-        return "redirect:/user/createdTasks";
+        return "redirect:/task/createdTasks";
     }
 
     @PostMapping("/{id}/changeStatus")
     public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, @Valid Status selectedStatus) {
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateStatus(id, user, selectedStatus);
-        return "redirect:/user/task/{id}";
+        return "redirect:/task/{id}";
     }
 
     @GetMapping("/{id}/canceled")
     public String changeStatusTaskCanceled(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id) {
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateStatus(id, user, Status.CANCELED);
-        return "redirect:/user/task/{id}";
+        return "redirect:/task/{id}";
+    }
+
+    @GetMapping("/allTasks/{typeTasks}")
+    public String getAllTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable String typeTasks) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+
+        model.addAttribute("typeTasks", typeTasks);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("user", user);
+        model.addAttribute("title", "All tasks");
+        return "tasks";
+    }
+
+    @GetMapping("/assignedTasks")
+    public String getAssignedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+        List<Task> resultTaskList = tasks.stream()
+                .filter(task -> task.getUserExecutor() == user)
+                .collect(Collectors.toList());
+
+        model.addAttribute("tasks", resultTaskList);
+        model.addAttribute("user", user);
+        model.addAttribute("title", "Tasks assigned to you");
+        return "tasks";
+    }
+
+    @GetMapping("/createdTasks")
+    public String getCreatedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+        List<Task> resultTaskList = tasks.stream()
+                .filter(task -> task.getUserCreator() == user)
+                .collect(Collectors.toList());
+
+        model.addAttribute("tasks", resultTaskList);
+        model.addAttribute("user", user);
+        model.addAttribute("title", "Tasks created by you");
+        return "tasks";
+    }
+
+    @GetMapping("/{id}")
+    public String getTaskPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        Task task = taskService.getTask(id);
+        List<Comment> comments = commentService.getCommentsByTask(task);
+        comments.sort(Comparator.comparing(Comment::getDate));
+        List<Status> statuses = new ArrayList<>();
+
+        // A user to whom the task is assigned can change its status from status IN_PROGRESS to status DONE
+        if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
+
+        // A user with the role USER can change the status a task to CANCELED if he is its CREATOR
+        if(task.getUserCreator().getId() == user.getId() && task.getStatus() != Status.CANCELED)
+            statuses.add(Status.CANCELED);
+
+        String textComment = "";
+
+        model.addAttribute("statuses", statuses);
+        model.addAttribute("task", task);
+        model.addAttribute("comments", comments);
+        model.addAttribute("textComment", textComment);
+        model.addAttribute("user", user);
+        return "task";
     }
 }

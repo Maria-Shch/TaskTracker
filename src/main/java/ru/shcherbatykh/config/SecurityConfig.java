@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.shcherbatykh.security.LoginSuccessHandler;
 import ru.shcherbatykh.security.LogoutSuccessHandler;
 
 @Configuration
@@ -24,13 +23,11 @@ import ru.shcherbatykh.security.LogoutSuccessHandler;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private final LoginSuccessHandler loginSuccessHandler;
     private final LogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, LoginSuccessHandler loginSuccessHandler, LogoutSuccessHandler logoutSuccessHandler) {
+    public SecurityConfig(UserDetailsService userDetailsService, LogoutSuccessHandler logoutSuccessHandler) {
         this.userDetailsService = userDetailsService;
-        this.loginSuccessHandler = loginSuccessHandler;
         this.logoutSuccessHandler = logoutSuccessHandler;
     }
 
@@ -48,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .loginPage("/auth/login").permitAll()
-                .successHandler(loginSuccessHandler)
+                .defaultSuccessUrl("/task/allTasks/all")
                 .failureUrl("/auth/failureLogin")
             .and()
                 .logout()

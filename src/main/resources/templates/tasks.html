@@ -11,19 +11,19 @@
         <p class="title" th:text="${title}"></p>
     </div>
     <div class="container">
-        <a class="title" href="/user/allTasks/all">
+        <a class="title" href="/task/allTasks/all">
             ALL TASKS
         </a>
 
-        <a class="title" href="/user/assignedTasks">
+        <a class="title" href="/task/assignedTasks">
             ASSIGNED TASKS
         </a>
 
-        <a class="title" href="/user/createdTasks">
+        <a class="title" href="/task/createdTasks">
             CREATED TASKS
         </a>
 
-        <a class="title" href="/user/statistics">
+        <a class="title" href="/statistics">
             STATISTICS
         </a>
 
@@ -34,13 +34,13 @@
 </header>
 <div class="div-main-container">
     <div class="div-buttons-tasks"  th:if="${typeTasks != null}">
-        <form  th:action="@{/user/allTasks/{typeTasks}(typeTasks='all')}" method="get">
+        <form  th:action="@{/task/allTasks/{typeTasks}(typeTasks='all')}" method="get">
             <input class="input-all"  type="submit" value="All"/>
         </form>
-        <form  th:action="@{/user/allTasks/{typeTasks}(typeTasks='assigned')}" method="get">
+        <form  th:action="@{/task/allTasks/{typeTasks}(typeTasks='assigned')}" method="get">
             <input class="input-assigned"  type="submit" value="Assigned"/>
         </form>
-        <form  th:action="@{/user/allTasks/{typeTasks}(typeTasks='created')}" method="get">
+        <form  th:action="@{/task/allTasks/{typeTasks}(typeTasks='created')}" method="get">
             <input class="input-created"  type="submit" value="Created"/>
         </form>
     </div>
@@ -92,7 +92,7 @@
                 <p class="p-task-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateDeadline)}"> </p>
             </div>
             <div class="d-more-task">
-                <form  th:action="@{'/user/task/' + ${task.id}}"  method="get">
+                <form  th:action="@{'/task/' + ${task.id}}"  method="get">
                     <input class="input-task" type="submit" value=">"/>
                 </form>
             </div>
