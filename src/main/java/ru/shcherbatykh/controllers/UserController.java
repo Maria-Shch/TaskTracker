@@ -87,7 +87,8 @@ public class UserController {
         if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
 
         // A user with the role USER can change the status a task to CANCELED if he is its CREATOR
-        if(task.getUserCreator().getId() == user.getId()) statuses.add(Status.CANCELED);
+        if(task.getUserCreator().getId() == user.getId() && task.getStatus() != Status.CANCELED)
+            statuses.add(Status.CANCELED);
 
         String textComment = "";
 

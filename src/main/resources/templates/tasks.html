@@ -108,6 +108,9 @@
                 <form th:if="${task.status.name() == 'TODO'}" th:action="@{'/task/' + ${task.id}} + '/accept'" method="get">
                     <input class="input-accept"  type="submit" value="Accept"/>
                 </form>
+                <form th:if="${task.status.name() == 'DONE'} and ${task.userCreator.id == user.id}" th:action="@{'/task/' + ${task.id}} + '/canceled'" method="get">
+                    <input class="input-canceled" type="submit" value="Cancel"/>
+                </form>
             </div>
             <div class="d-button" th:if="${task.userExecutor != null} and ${user.id != task.userExecutor.id}">
             </div>

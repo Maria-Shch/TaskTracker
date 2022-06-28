@@ -467,6 +467,37 @@ body{
     background-color: rgb(103, 135, 152);
 }
 
+.input-canceled{
+    background-color: #4E79A0;
+    border-radius: 30px;
+    margin-top: 15px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    height: 30px;
+    width: 115px;
+    line-height: 10px;
+    list-style: none;
+    outline: none;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.input-canceled:hover,
+.input-canceled:focus {
+    background-color: #234469;
+}
+
 .input-all{
     background-color: #f0354c;
     border-radius: 30px;

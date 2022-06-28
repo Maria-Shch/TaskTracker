@@ -130,4 +130,11 @@ public class TaskController {
         taskService.updateStatus(id, user, selectedStatus);
         return "redirect:/user/task/{id}";
     }
+
+    @GetMapping("/{id}/canceled")
+    public String changeStatusTaskCanceled(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        taskService.updateStatus(id, user, Status.CANCELED);
+        return "redirect:/user/task/{id}";
+    }
 }
