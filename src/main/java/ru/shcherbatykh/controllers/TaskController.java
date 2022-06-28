@@ -39,7 +39,7 @@ public class TaskController {
         List<Task> tasks= taskService.getTasksAssignedToUser(user);
         taskService.updateActivityStatus(id, user,false);
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/assignedTasks"; //todo а если активировлаи задачу из созданных задач
+        return "redirect:/user/task/{id}";
     }
 
     @GetMapping("/{id}/activate")
@@ -62,7 +62,7 @@ public class TaskController {
         if(taskService.getTask(id).getStatus() == Status.ACCEPTED) taskService.updateStatus(id, user, Status.IN_PROGRESS);
 
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/assignedTasks"; //todo а если активировлаи задачу из созданных задач
+        return "redirect:/user/task/{id}";
     }
 
     @GetMapping("/{id}/accept")
@@ -73,7 +73,7 @@ public class TaskController {
         taskService.updateStatus(id, user, Status.ACCEPTED);
 
         model.addAttribute("tasks", tasks);
-        return "redirect:/user/assignedTasks"; //todo а если активировлаи задачу из созданных задач
+        return "redirect:/user/task/{id}";
     }
 
     @PostMapping("/{id}/addcomment")
@@ -82,8 +82,7 @@ public class TaskController {
         User user = userService.findByUsername(userDetails.getUsername());
         Comment comment = new Comment(task, user, textComment);
         commentService.addComment(comment);
-        String url = "redirect:/user/task/" + id;
-        return url;
+        return "redirect:/user/task/{id}";
     }
 
     @GetMapping("/create/{idParentTask}")
