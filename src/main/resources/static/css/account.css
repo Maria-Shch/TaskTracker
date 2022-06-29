@@ -1,11 +1,84 @@
 /*BODY*/
-.div-main-container{
+.div-container-main{
     width: 80%;
     margin-top: 30px;
     margin-bottom: 30px;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.d-parameters{
+    width:40%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.d-parameter{
+    width: 50%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    border: solid #4E79A0 2px;
+}
+
+.p-parameter1{
+    background-color: #FFFFFF;
+    color: #2D4B66;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
+    height: 35px;
+
+}
+
+.p-parameter2{
+    background-color: #d2d2d28a;
+    color: #2D4B66;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
+    height: 35px;
+
+}
+
+.p-parameter-text1{
+    background-color: #FFFFFF;
+    color: #2D4B66;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
+    height: 35px;
+
+}
+
+.p-parameter-text2{
+    background-color: #d2d2d28a;
+    color: #2D4B66;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
+    height: 35px;
+
 }

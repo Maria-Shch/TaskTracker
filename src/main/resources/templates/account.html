@@ -37,8 +37,21 @@
         </form>
     </div>
 </header>
-<div class="d-container-main">
-
+<div class="div-container-main">
+    <div class="d-parameters">
+        <div class="d-parameter">
+            <p class="p-parameter1">id</p>
+            <p class="p-parameter2">Name</p>
+            <p class="p-parameter1">Lastname</p>
+            <p class="p-parameter2">Login</p>
+        </div>
+        <div class="d-parameter">
+            <p class="p-parameter-text1" th:text="${user.id}"></p>
+            <p class="p-parameter-text2" th:text="${user.name}"></p>
+            <p class="p-parameter-text1" th:text="${user.lastname}"></p>
+            <p class="p-parameter-text2" th:text="${user.username}"></p>
+        </div>
+    </div>
 </div>
 </body>
 </html>
