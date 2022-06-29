@@ -67,7 +67,7 @@ public class CommandUtils {
     }
 
     public static String convertLocalDateTimeFromStringToString(String dateTime){
-        if (dateTime == null) return "null";
+        if (dateTime == null) return "'not assigned'";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         LocalDateTime date =  LocalDateTime.parse(dateTime, formatter);
         return convertDateAndTimeToStringForPrint(date);

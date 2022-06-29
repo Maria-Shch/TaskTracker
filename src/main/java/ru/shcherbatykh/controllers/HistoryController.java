@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Comparator.reverseOrder;
 import static ru.shcherbatykh.utils.CommandUtils.convertLocalDateTimeFromStringToString;
 
 @Controller
@@ -42,95 +43,19 @@ public class HistoryController {
         String idUser = String.valueOf(user.getId());
         List<History> histories = historyService.getHistoriesOfLastThreeDays();
 
-        List<History> assignedTasks = histories.stream()
-                .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
-                        && history.getNewValue().equals(idUser))
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.ASSIGNED_TASK);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> startedWork = histories.stream()
-                .filter(history -> history.getUserWhoUpdated() == user
-                        && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
-                        && history.getOldValue().equals("false"))
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.STARTED_WORK);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-
-        List<History> stoppedWork = histories.stream()
-                .filter(history -> history.getUserWhoUpdated() == user
-                        && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
-                        && history.getOldValue().equals("true"))
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.STOPPED_WORK);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> changedDeadlineByExecutor = histories.stream()
-                .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE
-                        && history.getTask().getUserExecutor() != null
-                        && history.getTask().getUserExecutor().getId() == user.getId())
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.CHANGE_STATUS_BY_EXECUTOR);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> changedStatusByExecutor = histories.stream()
-                .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
-                        && history.getTask().getUserExecutor() != null
-                        && history.getTask().getUserExecutor().getId() == user.getId())
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.CHANGE_STATUS_BY_EXECUTOR);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> changedStatusForTaskCreatedByUser = histories.stream()
-                .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
-                        && history.getTask().getUserCreator().getId() == user.getId())
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.CHANGE_STATUS_FOR_TASK_CREATED_BY_USER);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> changedDeadlineForTaskCreatedByUser = histories.stream()
-                .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE
-                        && history.getTask().getUserCreator().getId() == user.getId())
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.CHANGE_DEADLINE_FOR_TASK_CREATED_BY_USER);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> changeAssignedUserForTaskCreatedByUser = histories.stream()
-                .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
-                        && history.getTask().getUserCreator().getId() == user.getId())
-                .map(history -> {
-                    history.setTypeEvent(TypeEvent.CHANGE_ASSIGNED_USER_FOR_TASK_CREATED_BY_USER);
-                    return history;
-                })
-                .collect(Collectors.toList());
-
-        List<History> resultList = Stream.of(assignedTasks,
-                        startedWork,
-                        stoppedWork,
-                        changedDeadlineByExecutor,
-                        changedStatusByExecutor,
-                        changedStatusForTaskCreatedByUser,
-                        changedDeadlineForTaskCreatedByUser,
-                        changeAssignedUserForTaskCreatedByUser)
+        List<History> resultList = Stream.of(
+                    historyService.getAssignedTasks(histories, idUser),
+                    historyService.getStartedWork(histories, user),
+                    historyService.getStoppedWork(histories, user),
+                    historyService.getChangedDeadlineByExecutor(histories, user),
+                    historyService.getChangedStatusByExecutor(histories, user),
+                    historyService.getChangedStatusForTaskCreatedByUser(histories, user),
+                    historyService.getChangedDeadlineForTaskCreatedByUser(histories, user),
+                    historyService.getChangeAssignedUserForTaskCreatedByUser(histories, user))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        Collections.sort(resultList, Comparator.comparing(History::getDate));
+        Collections.sort(resultList, Comparator.comparing(History::getDate, reverseOrder()));
 
         model.addAttribute("user", user);
         model.addAttribute("resultList", resultList);

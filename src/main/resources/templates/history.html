@@ -42,79 +42,110 @@
     </div>
 </header>
 <div class="div-main-container">
-    <div class="div-task">
+    <div class="div-histories">
         <div th:each="history : ${resultList}">
             <div th:if="${history.typeEvent.name() == 'ASSIGNED_TASK'}" class="div-history">
-                <p> The task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p>was assigned to you</p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text">The task </p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                    <p class="p-text">was assigned to you</p>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'STARTED_WORK'}" class="div-history">
-                <p> You started working on the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text">You started working on the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'STOPPED_WORK'}" class="div-history">
-                <p> You stopped working on the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text">You stopped working on the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'CHANGE_DEADLINE_BY_CREATOR'}" class="div-history">
-                <p> The deadline for the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p>assigned to you has been changed from</p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertLocalDateTimeFromStringToString(history.oldValue)}"></p>
-                <p>to</p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertLocalDateTimeFromStringToString(history.newValue)}"></p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text"> The deadline for the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                    <p class="p-text">assigned to you has been changed from</p>
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertLocalDateTimeFromStringToString(history.oldValue)}"></p>
+                    <p class="p-text">to</p>
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertLocalDateTimeFromStringToString(history.newValue)}" class="p-text"></p>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'CHANGE_STATUS_BY_EXECUTOR'}" class="div-history">
-                <p> You have changed the status of the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p>from</p>
-                <p th:text="${history.oldValue}"></p>
-                <p>to</p>
-                <p th:text="${history.newValue}"></p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text"> You have changed the status of the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                    <p class="p-text">from</p>
+                    <p th:text="${history.oldValue}" th:class="${history.oldValue}"></p>
+                    <p class="p-text">to</p>
+                    <p th:text="${history.newValue}" th:class="${history.newValue}"></p>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'CHANGE_STATUS_FOR_TASK_CREATED_BY_USER'}" class="div-history">
-                <p> User </p>
-                <a th:href="@{/user/{id}(id=${history.userWhoUpdated.id})}"
-                   th:text="${history.userWhoUpdated.name + ' ' + history.userWhoUpdated.lastname}"></a>
-                <p>has changed the status of the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p>from</p>
-                <p th:text="${history.oldValue}"></p>
-                <p>to</p>
-                <p th:text="${history.newValue}"></p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text">User</p>
+                    <a th:href="@{/user/{id}(id=${history.userWhoUpdated.id})}"
+                       th:text="${history.userWhoUpdated.name + ' ' + history.userWhoUpdated.lastname}" class="a-history"></a>
+                    <p class="p-text">has changed the status of the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                    <p class="p-text">from</p>
+                    <p th:text="${history.oldValue}" th:class="${history.oldValue}"></p>
+                    <p class="p-text">to</p>
+                    <p th:text="${history.newValue}" th:class="${history.newValue}"></p>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'CHANGE_DEADLINE_FOR_TASK_CREATED_BY_USER'}" class="div-history">
-                <p> User </p>
-                <a th:href="@{/user/{id}(id=${history.userWhoUpdated.id})}"
-                   th:text="${history.userWhoUpdated.name + ' ' + history.userWhoUpdated.lastname}"></a>
-                <p>has changed the due date of the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p>from</p>
-                <p th:text="${history.oldValue}"></p>
-                <p>to</p>
-                <p th:text="${history.newValue}"></p>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text"> User </p>
+                    <a th:href="@{/user/{id}(id=${history.userWhoUpdated.id})}"
+                       th:text="${history.userWhoUpdated.name + ' ' + history.userWhoUpdated.lastname}" class="a-history"></a>
+                    <p class="p-text">has changed the due date of the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                    <p class="p-text">from</p>
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertLocalDateTimeFromStringToString(history.oldValue)}" class="p-text"></p>
+                    <p class="p-text">to</p>
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertLocalDateTimeFromStringToString(history.newValue)}" class="p-text"></p>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
             <div th:if="${history.typeEvent.name() == 'CHANGE_ASSIGNED_USER_FOR_TASK_CREATED_BY_USER'}" class="div-history">
-                <p> User </p>
-                <a th:href="@{/user/{id}(id=${history.userWhoUpdated.id})}"
-                   th:text="${history.userWhoUpdated.name + ' ' + history.userWhoUpdated.lastname}"></a>
-                <p>has changed the assigned user of the task</p>
-                <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}"></a>
-                <p>from</p>
-                <a th:href="@{/user/{id}(id=${history.oldValue})}"
-                   th:text="this"></a>
-                <p>to</p>
-                <a th:href="@{/user/{id}(id=${history.newValue})}"
-                   th:text="this"></a>
-                <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}"></p>
+                <div class="div-history-text">
+                    <p class="p-text"> User </p>
+                    <a th:href="@{/user/{id}(id=${history.userWhoUpdated.id})}"
+                       th:text="${history.userWhoUpdated.name + ' ' + history.userWhoUpdated.lastname}" class="a-history"></a>
+                    <p class="p-text">has changed the assigned user of the task</p>
+                    <a th:href="@{/task/{id}(id=${history.task.id})}" th:text="${history.task.title}" class="a-history"></a>
+                    <p class="p-text">from</p>
+                    <a th:if="${history.oldValue != null}" th:href="@{/user/{id}(id=${history.oldValue})}" th:text="this" class="a-history"></a>
+                    <p th:if="${history.oldValue == null}" class="a-history">not assigned</p>
+                    <p class="p-text">to</p>
+                    <a th:href="@{/user/{id}(id=${history.newValue})}" th:text="this" class="a-history"></a>
+                </div>
+                <div class="div-history-date">
+                    <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(history.date)}" class="p-text-date"></p>
+                </div>
             </div>
         </div>
     </div>

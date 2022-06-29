@@ -25,4 +25,28 @@ public interface HistoryService {
     @Transactional
     List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod
             (Task task, User user, LocalDateTime periodTimeStart, LocalDateTime periodTimeFinish);
+
+    @Transactional
+    List<History> getAssignedTasks(List<History> histories, String idUser);
+
+    @Transactional
+    List<History> getStartedWork(List<History> histories, User user);
+
+    @Transactional
+    List<History> getStoppedWork(List<History> histories, User user);
+
+    @Transactional
+    List<History> getChangedDeadlineByExecutor(List<History> histories, User user);
+
+    @Transactional
+    List<History> getChangedStatusByExecutor(List<History> histories, User user);
+
+    @Transactional
+    List<History> getChangedStatusForTaskCreatedByUser(List<History> histories, User user);
+
+    @Transactional
+    List<History> getChangedDeadlineForTaskCreatedByUser(List<History> histories, User user);
+
+    @Transactional
+    List<History> getChangeAssignedUserForTaskCreatedByUser(List<History> histories, User user);
 }

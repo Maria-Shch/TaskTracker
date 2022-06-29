@@ -1,4 +1,124 @@
+.div-main-container{
+    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.div-histories{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .div-history{
+    width: 100%;
+    background-color: #FFFFFF;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.p-text{
+    color: rgba(0, 0, 0, 0.77);
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 10px 10px 10px;
+}
+
+.a-history{
+    color: #4e79a0;
+    font-size: 20px;
+    text-decoration: none;
+    background-color: #dee5eb;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px;
+}
+
+.TODO{
+    color: #8B8984;
+    background-color: rgba(139, 137, 132, 0.25);
+    font-size: 17px;
+    font-weight: bold;
+    margin: 5px 0px 5px 0px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+}
+
+.ACCEPTED{
+    color: #E2B950;
+    background-color: rgba(226, 185, 80, 0.25);
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+}
+
+.IN_PROGRESS{
+    color: #3196B6;
+    background-color: rgba(49, 150, 182, 0.25);
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+}
+
+.DONE{
+    color: #48967A;
+    background-color: rgba(72, 150, 122, 0.25);
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+}
+
+.CANCELED{
+    color: #CE4152;
+    background-color: rgba(206, 65, 82, 0.25);
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+}
+
+.div-history-text{
+    width: 85%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+    align-items: center;
+}
+
+.div-history-date{
+    width: 15%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.p-text-date{
+    background-color: #dce5ec;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    color: rgb(50 77 101);
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 10px 10px 10px;
 }
