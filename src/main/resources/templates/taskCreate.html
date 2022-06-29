@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Tasks</title>
     <link th:href="@{/css/taskCreate.css}" href="../src/main/resources/static/css/taskCreate.css" rel="stylesheet">
+    <link th:href="@{/css/header.css}" href="../src/main/resources/static/css/header.css" rel="stylesheet">
 </head>
 <body>
 <header class="header">
     <div class="d-text-page">
-        <p class="title" th:text="${title}"></p>
+        <p class="title">Creating task</p>
     </div>
     <div class="container">
         <a class="title" href="/task/assignedTasks">
@@ -27,8 +28,12 @@
             STATISTICS
         </a>
 
-        <form action="/auth/logout" method="post">
-            <input class="input-logout" type="submit" value="Sign out"/>
+        <form  class="form-account" th:action="@{/user/account}" method="get">
+            <input class="input-account" type="submit" name="" value="">
+        </form>
+
+        <form  class="form-account" action="/auth/logout" method="post">
+            <input class="input-logout" type="submit" name="" value="">
         </form>
     </div>
 </header>

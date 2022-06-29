@@ -1,7 +1,11 @@
 package ru.shcherbatykh.controllers;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.shcherbatykh.models.User;
 import ru.shcherbatykh.services.CommentService;
 import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
@@ -20,4 +24,10 @@ public class UserController {
         this.commentService = commentService;
     }
 
+    @GetMapping("/account")
+    public String changeStatusTaskCanceled(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("user", user);
+        return "account";
+    }
 }

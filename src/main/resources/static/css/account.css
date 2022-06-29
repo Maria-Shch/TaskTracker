@@ -1,0 +1,11 @@
+/*BODY*/
+.div-main-container{
+    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}

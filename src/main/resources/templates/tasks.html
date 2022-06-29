@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Tasks</title>
     <link th:href="@{/css/tasks.css}" href="../src/main/resources/static/css/tasks.css" rel="stylesheet">
+    <link th:href="@{/css/header.css}" href="../src/main/resources/static/css/header.css" rel="stylesheet">
 </head>
 <body>
 <header class="header">
@@ -27,8 +28,12 @@
             STATISTICS
         </a>
 
-        <form action="/auth/logout" method="post">
-            <input class="input-logout" type="submit" value="Sign out"/>
+        <form  class="form-account" th:action="@{/user/account}" method="get">
+            <input class="input-account" type="submit" name="" value="">
+        </form>
+
+        <form  class="form-account" action="/auth/logout" method="post">
+            <input class="input-logout" type="submit" name="" value="">
         </form>
     </div>
 </header>

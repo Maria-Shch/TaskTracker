@@ -1,0 +1,74 @@
+body{
+    margin: 0px;
+    font-family: "Arial Unicode MS";
+    background-color: #a0b4c557;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: flex-end;
+}
+
+/*HEADER*/
+.header{
+    width: 100%;
+    background-color: #4E79A0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.d-text-page{
+    margin-left: 12%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.container{
+    width: 60%;
+    margin-right: 10%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
+}
+
+.title{
+    color: rgba(244, 244, 255, 0.86);
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.input-logout{
+    background: url('../img/logout.png');
+    background-size: 40px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: none;
+}
+
+.form-account{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin: 0px;
+}
+
+.input-account {
+    background: url('../img/acc.png');
+    background-size: 40px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: none;
+}

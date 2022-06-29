@@ -1,0 +1,44 @@
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task</title>
+    <link th:href="@{/css/account.css}" href="../src/main/resources/static/css/account.css" rel="stylesheet">
+    <link th:href="@{/css/header.css}" href="../src/main/resources/static/css/header.css" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="d-text-page">
+        <p class="title">Your account</p>
+    </div>
+    <div class="container">
+        <a class="title" href="/task/assignedTasks">
+            ALL TASKS
+        </a>
+
+        <a class="title" href="/task/assignedTasks">
+            ASSIGNED TASKS
+        </a>
+
+        <a class="title" href="/task/createdTasks">
+            CREATED TASKS
+        </a>
+
+        <a class="title" href="/statistics">
+            STATISTICS
+        </a>
+
+        <form  class="form-account" th:action="@{/user/account}" method="get">
+            <input class="input-account" type="submit" name="" value="">
+        </form>
+
+        <form  class="form-account" action="/auth/logout" method="post">
+            <input class="input-logout" type="submit" name="" value="">
+        </form>
+    </div>
+</header>
+<div class="d-container-main">
+
+</div>
+</body>
+</html>
