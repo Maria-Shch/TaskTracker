@@ -8,6 +8,7 @@ import ru.shcherbatykh.models.User;
 import ru.shcherbatykh.repositories.HistoryRepository;
 import ru.shcherbatykh.classes.UpdatableTaskField;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +24,13 @@ public class HistoryServiceImpl implements HistoryService{
     @Override @Transactional
     public List<History> getHistories() {
         return historyRepository.findAll();
+    }
+
+    @Override
+    public List<History> getHistoriesOfLastThreeDays() {
+        LocalDateTime finishOfPeriod = LocalDateTime.now();
+        LocalDateTime startOfPeriod =finishOfPeriod.minusDays(3);
+        return historyRepository.findAllOfLastThreeDays(startOfPeriod, finishOfPeriod);
     }
 
     @Override @Transactional

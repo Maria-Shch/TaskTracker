@@ -3,6 +3,7 @@ package ru.shcherbatykh.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import ru.shcherbatykh.classes.TypeEvent;
 import ru.shcherbatykh.classes.UpdatableTaskField;
 
 import javax.persistence.*;
@@ -36,6 +37,9 @@ public class History {
 
     @CreationTimestamp
     private LocalDateTime date;
+
+    @Transient
+    private TypeEvent typeEvent;
 
     public History(Task task, User userWhoUpdated, UpdatableTaskField taskField, String oldValue, String newValue) {
         this.task = task;

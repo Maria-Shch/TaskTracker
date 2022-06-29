@@ -7,7 +7,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CommandUtils {
     public static String convertPeriodOfTimeToString(long milliseconds){
@@ -65,5 +64,12 @@ public class CommandUtils {
     public static LocalDateTime convertLocalDateTimeFromString(String dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         return LocalDateTime.parse(dateTime, formatter);
+    }
+
+    public static String convertLocalDateTimeFromStringToString(String dateTime){
+        if (dateTime == null) return "null";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime date =  LocalDateTime.parse(dateTime, formatter);
+        return convertDateAndTimeToStringForPrint(date);
     }
 }

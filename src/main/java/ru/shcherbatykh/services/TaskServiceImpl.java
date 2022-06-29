@@ -36,6 +36,9 @@ public class TaskServiceImpl implements TaskService{
     @Override @Transactional
     public void addTask(Task task) {
         taskRepository.save(task);
+        if(task.getUserExecutor() != null){
+            updateUserExecutor(task.getId(), task.getUserCreator(),task.getUserExecutor());
+        }
     }
 
     @Override @Transactional

@@ -15,6 +15,12 @@ public interface HistoryRepository extends CrudRepository<History, Long> {
 
     List<History> findAll();
 
+    @Query(value =
+            "SELECT * FROM history WHERE date BETWEEN :startOfPeriod AND :finishOfPeriod",
+            nativeQuery = true)
+    List<History> findAllOfLastThreeDays(@Param("startOfPeriod") LocalDateTime startOfPeriod,
+                                         @Param("finishOfPeriod") LocalDateTime finishOfPeriod);
+
     List<History> findByTask(Task task);
 
     @Query(value =

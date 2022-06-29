@@ -14,6 +14,9 @@ public interface HistoryService {
     List<History> getHistories();
 
     @Transactional
+    List<History> getHistoriesOfLastThreeDays();
+
+    @Transactional
     List<History> historyOfTask(Task task);
 
     @Transactional
