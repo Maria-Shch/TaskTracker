@@ -39,7 +39,6 @@ body{
 }
 
 .title{
-    margin: 15px 0px 15px 0px;
     color: rgba(244, 244, 255, 0.86);
     font-size: 22px;
     font-weight: bold;
@@ -590,3 +589,4 @@ body{
 .input-created:focus {
     background-color: #88a4da;
 }
+

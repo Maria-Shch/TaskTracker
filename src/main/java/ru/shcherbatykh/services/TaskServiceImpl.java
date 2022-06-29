@@ -154,8 +154,11 @@ public class TaskServiceImpl implements TaskService{
     @Override @Transactional
     public void updateUserExecutor(long id, User userWhoUpdated, User newUserExecutor){
         Task task = taskRepository.getTaskById(id);
+        String oldIdUserExecutor = null;
+        if(task.getUserExecutor() != null){
+            oldIdUserExecutor = String.valueOf(task.getUserExecutor().getId());
+        }
 
-        String oldIdUserExecutor = String.valueOf(task.getUserExecutor().getId());
         String newIdUserExecutor = String.valueOf(newUserExecutor.getId());
         historyService.recordTaskFieldChange(task, userWhoUpdated, UpdatableTaskField.ID_USER_EXECUTOR, oldIdUserExecutor, newIdUserExecutor);
 
@@ -177,8 +180,12 @@ public class TaskServiceImpl implements TaskService{
     @Override @Transactional
     public void updateDateDeadline(long id, User userWhoUpdated, LocalDateTime newDateDeadline){
         Task task = taskRepository.getTaskById(id);
+        String oldDateDeadline = null;
 
-        String oldDateDeadline = task.getDateDeadline().toString();
+        if(task.getDateDeadline() != null){
+            oldDateDeadline = task.getDateDeadline().toString();
+        }
+
         historyService.recordTaskFieldChange(task, userWhoUpdated, UpdatableTaskField.DATE_DEADLINE, oldDateDeadline, newDateDeadline.toString());
 
         task.setDateDeadline(newDateDeadline);

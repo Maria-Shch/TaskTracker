@@ -109,7 +109,7 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    margin: 20px 0px 0px 0px;
+    margin: 20px 0px 20px 0px;
     padding: 0px 20px 0px 20px;
 }
 
@@ -118,7 +118,7 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    margin: 20px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
     padding: 0px 20px 0px 20px;
 }
 
@@ -136,10 +136,15 @@ body{
     justify-content: start;
     margin: 10px 0px 10px 0px;
     height: 30px;
+    align-items: center;
 }
 
 .d-parameter{
     width: 130px;
+}
+
+.d-parameter-big{
+    width: 200px;
 }
 
 .d-change-status{
@@ -436,11 +441,17 @@ body{
 }
 
 .form-control{
-    background-color: rgba(74, 143, 215, 0.06);
+    padding: 0px 0px 0px 5px;
+    height: 35px;
+    color: rgba(0, 0, 0, 0.77);
+    font-size: 16px;
+    font-size: 16px;
+    font-weight: normal;
+    background-color: #FFFFFF;
     border-radius: 5px;
-    border-color: #6564cf5e;
-    padding: 1px;
-    margin-right: 10px;
+    border-color: #b2b2b25e;
+    outline: none;
+    margin: 0px 10px 0px 0px;
 }
 
 .p-comment-text{
@@ -510,4 +521,36 @@ body{
 .button-comment:hover,
 .button-comment:focus {
     background-color: #f0354c;
+}
+
+.select-user{
+    margin: 10px 0px 10px 0px;
+    padding: 5px 0px 0px 10px;
+    height: 35px;
+    color: rgba(0, 0, 0, 0.77);
+    font-size: 17px;
+    font-weight: normal;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border-color: #b2b2b25e;
+    outline: none;
+    align-items: center;
+    width: 100%;
+}
+.input-date{
+    width: 70%;
+    margin: 10px 10px 10px 0px;
+    padding: 0px 10px 0px 10px;
+    height: 35px;
+    color: rgba(0, 0, 0, 0.77);
+    font-size: 17px;
+    font-weight: normal;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border-color: #b2b2b25e;
+    outline: none;
+}
+
+.form-date{
+    margin: 0px;
 }

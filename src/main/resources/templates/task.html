@@ -106,13 +106,39 @@
                             <p class="p-parameter">Change status</p>
                         </div>
                         <div class="d-change-status">
-                            <form th:action="@{'/task/' + ${task.id}} + '/changeStatus'" th:method="post">
+                            <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeStatus'" th:method="post">
                                 <select class="form-control" name="selectedStatus">
                                     <option th:each="status : ${statuses}" th:value="${status.name}" th:text="${status.name}"></option>
                                 </select>
                                 <button  class="button-change-status" type="submit">Submit</button>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-parameters" th:if="${user.role.name() == 'ADMIN'}">
+                <div class="d-parameters-column">
+                    <div class="d-parameters-column-row">
+                        <div class="d-parameter-big">
+                            <p class="p-parameter">Change due date</p>
+                        </div>
+
+                        <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeDueDate'" method="post">
+                            <input class="input-date" type="datetime-local" id="newDueDate" name="newDueDate"/>
+                            <button class="button-change-status" type="submit">Change</button>
+                        </form>
+                    </div>
+                    <div class="d-parameters-column-row">
+                        <div class="d-parameter-big">
+                            <p class="p-parameter">Change assignee user</p>
+                        </div>
+                        <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeUserExecutor'" method="post">
+                            <select class="form-control" name="idNewUserExecutor">
+                                <option th:value=${0} th:text="'User executor'"></option>
+                                <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
+                            </select>
+                            <button class="button-change-status" type="submit">Change</button>
+                        </form>
                     </div>
                 </div>
             </div>

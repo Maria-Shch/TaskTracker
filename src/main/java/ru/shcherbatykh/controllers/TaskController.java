@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.shcherbatykh.classes.Role;
 import ru.shcherbatykh.classes.Status;
 import ru.shcherbatykh.models.Comment;
 import ru.shcherbatykh.models.Task;
@@ -39,7 +40,7 @@ public class TaskController {
     @GetMapping("/{id}/disactivate")
     public String taskDisactivate(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long id) {
         User user = userService.findByUsername(userDetails.getUsername());
-        List<Task> tasks= taskService.getTasksAssignedToUser(user);
+        List<Task> tasks = taskService.getTasksAssignedToUser(user);
         taskService.updateActivityStatus(id, user,false);
         model.addAttribute("tasks", tasks);
         return "redirect:/task/{id}";
@@ -110,8 +111,6 @@ public class TaskController {
         User user = userService.findByUsername(userDetails.getUsername());
         task.setUserCreator(user);
 
-        System.out.println(idParentTask);
-
         if(idParentTask != 0L){
             Task parentTask = taskService.getTask(idParentTask);
             task.setParentTask(parentTask);
@@ -130,7 +129,10 @@ public class TaskController {
     @PostMapping("/{id}/changeStatus")
     public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, @Valid Status selectedStatus) {
         User user = userService.findByUsername(userDetails.getUsername());
-        taskService.updateStatus(id, user, selectedStatus);
+        Task task = taskService.getTask(id);
+        if(task.getStatus() != selectedStatus){
+            taskService.updateStatus(id, user, selectedStatus);
+        }
         return "redirect:/task/{id}";
     }
 
@@ -189,20 +191,55 @@ public class TaskController {
         comments.sort(Comparator.comparing(Comment::getDate));
         List<Status> statuses = new ArrayList<>();
 
-        // A user to whom the task is assigned can change its status from status IN_PROGRESS to status DONE
-        if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
+        if(user.getRole() == Role.USER){
+            // A user to whom the task is assigned can change its status from status IN_PROGRESS to status DONE
+            if(task.getStatus() == Status.IN_PROGRESS) statuses.add(Status.DONE);
 
-        // A user with the role USER can change the status a task to CANCELED if he is its CREATOR
-        if(task.getUserCreator().getId() == user.getId() && task.getStatus() != Status.CANCELED)
+            // A user with the role USER can change the status a task to CANCELED if he is its CREATOR
+            if(task.getUserCreator().getId() == user.getId() && task.getStatus() != Status.CANCELED)
+                statuses.add(Status.CANCELED);
+        }
+
+        if(user.getRole() == Role.ADMIN){
+            statuses.add(Status.IN_PROGRESS);
+            statuses.add(Status.DONE);
             statuses.add(Status.CANCELED);
+        }
 
         String textComment = "";
+        String newDueDate = "";
+        long idNewUserExecutor = 0L;
 
+
+        model.addAttribute("newDueDate", newDueDate);
+        model.addAttribute("idNewUserExecutor", idNewUserExecutor);
         model.addAttribute("statuses", statuses);
         model.addAttribute("task", task);
         model.addAttribute("comments", comments);
         model.addAttribute("textComment", textComment);
         model.addAttribute("user", user);
+        model.addAttribute("users", userService.users());
         return "task";
+    }
+
+    @PostMapping("/{id}/changeDueDate")
+    public String changeDueDateTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id,
+                                    @ModelAttribute("newDueDate") String newDueDate) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        if (newDueDate.length() != 0) {
+            LocalDateTime newDate = convertLocalDateTimeFromString(newDueDate);
+            taskService.updateDateDeadline(id, user, newDate);
+        }
+        return "redirect:/task/{id}";
+    }
+
+    @PostMapping("/{id}/changeUserExecutor")
+    public String changeDueDateTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id,
+                                    @ModelAttribute("idNewUserExecutor") long idNewUserExecutor) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        if(idNewUserExecutor != 0) {
+            taskService.updateUserExecutor(id, user, userService.getUser(idNewUserExecutor));
+        }
+        return "redirect:/task/{id}";
     }
 }

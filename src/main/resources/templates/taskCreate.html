@@ -41,7 +41,6 @@
             <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
         </select>
         <div class="div-date">
-            <label class="label-date" for="deadline">Дата и время: </label>
             <input class="input-date" type="datetime-local" id="deadline" name="deadline"/>
         </div>
         <button class="b-create" type="submit">Create</button>
