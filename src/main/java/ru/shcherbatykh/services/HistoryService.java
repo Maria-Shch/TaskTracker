@@ -13,8 +13,7 @@ public interface HistoryService {
     @Transactional
     List<History> getHistories();
 
-    @Transactional
-    List<History> getHistoriesOfLastThreeDays();
+    List<History> getHistoriesOfLastNDays(int countMinusDays);
 
     @Transactional
     List<History> historyOfTask(Task task);

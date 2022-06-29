@@ -28,9 +28,9 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override
-    public List<History> getHistoriesOfLastThreeDays() {
+    public List<History> getHistoriesOfLastNDays(int countMinusDays) {
         LocalDateTime finishOfPeriod = LocalDateTime.now();
-        LocalDateTime startOfPeriod =finishOfPeriod.minusDays(3);
+        LocalDateTime startOfPeriod =finishOfPeriod.minusDays(countMinusDays);
         return historyRepository.findAllOfLastThreeDays(startOfPeriod, finishOfPeriod);
     }
 
