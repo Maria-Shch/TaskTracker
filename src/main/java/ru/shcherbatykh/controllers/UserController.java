@@ -25,8 +25,15 @@ public class UserController {
     }
 
     @GetMapping("/account")
-    public String changeStatusTaskCanceled(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String getAccountPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("user", user);
+        return "account";
+    }
+
+    @GetMapping("/{id}")
+    public String getUserPage(@PathVariable long id, Model model) {
+        User user = userService.getUser(id);
         model.addAttribute("user", user);
         return "account";
     }
