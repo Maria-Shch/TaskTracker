@@ -29,7 +29,7 @@ public class LogoutSuccessHandler  extends SimpleUrlLogoutSuccessHandler {
         User user = userService.findByUsername(userDetails.getUsername());
 
         // When the user exits the application, it is necessary to deactivate his active task
-        taskService.deactivateActiveUserTask(user);
+        taskService.deactivateActiveTaskUser(user);
         super.setDefaultTargetUrl("/auth/login");
         super.onLogoutSuccess(request, response, authentication);
     }

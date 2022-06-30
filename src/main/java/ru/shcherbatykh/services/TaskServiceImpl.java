@@ -75,7 +75,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override @Transactional
-    public void deactivateActiveUserTask(User user){
+    public void deactivateActiveTaskUser(User user){
         List<Task> tasks = getTasksAssignedToUser(user);
 
         Task activeTask = tasks.stream()

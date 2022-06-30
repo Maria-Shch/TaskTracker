@@ -56,7 +56,7 @@ public class TaskController {
         // the user can work on only one task -
         // you should check if there is already an active task among his tasks.
         // If it exists, you should make it inactive and only after that activate the task selected by the user.
-        taskService.deactivateActiveUserTask(user);
+        taskService.deactivateActiveTaskUser(user);
 
         taskService.updateActivityStatus(id, user, true);
 
@@ -226,6 +226,9 @@ public class TaskController {
     public String changeDueDateTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id,
                                     @ModelAttribute("newDueDate") String newDueDate) {
         User user = userService.findByUsername(userDetails.getUsername());
+
+        // newDueDate length can be 0 when the user tried to change due date
+        // without selecting it and just clicked the button 'change'
         if (newDueDate.length() != 0) {
             LocalDateTime newDate = convertLocalDateTimeFromString(newDueDate);
             taskService.updateDateDeadline(id, user, newDate);
@@ -237,7 +240,15 @@ public class TaskController {
     public String changeDueDateTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id,
                                     @ModelAttribute("idNewUserExecutor") long idNewUserExecutor) {
         User user = userService.findByUsername(userDetails.getUsername());
+
+        // idNewUserExecutor can be 0 when the user tried to change user executor
+        // without selecting it and just clicked the button 'change'
         if(idNewUserExecutor != 0) {
+            // If someone changed the user executor while someone else was working on this task,
+            // then you need to make this task inactive for the previous user executor and
+            // only after that change the user executor
+            Task task = taskService.getTask(id);
+            if(task.isActivityStatus()) taskService.updateActivityStatus(id, task.getUserExecutor(), false);
             taskService.updateUserExecutor(id, user, userService.getUser(idNewUserExecutor));
         }
         return "redirect:/task/{id}";

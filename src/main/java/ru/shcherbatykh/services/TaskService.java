@@ -34,7 +34,7 @@ public interface TaskService {
     List<Task> getFirstChildTasks(Task task);
 
     @Transactional
-    void deactivateActiveUserTask(User user);
+    void deactivateActiveTaskUser(User user);
 
     @Transactional
     List<Task> getTasksInHierarchicalOrder();
