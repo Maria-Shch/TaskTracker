@@ -119,8 +119,7 @@ public class HistoryServiceImpl implements HistoryService{
     public List<History> getChangedStatusForTaskCreatedByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
-                        && history.getTask().getUserCreator().getId() == user.getId()
-                        && history.getUserWhoUpdated().getId() != user.getId())
+                        && history.getTask().getUserCreator().getId() == user.getId())
                 .map(history -> {
                     history.setTypeEvent(TypeEvent.CHANGE_STATUS_FOR_TASK_CREATED_BY_USER);
                     return history;
@@ -144,8 +143,7 @@ public class HistoryServiceImpl implements HistoryService{
     public List<History> getChangeAssignedUserForTaskCreatedByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
-                        && history.getTask().getUserCreator().getId() == user.getId()
-                        && history.getUserWhoUpdated().getId() != user.getId())
+                        && history.getTask().getUserCreator().getId() == user.getId())
                 .map(history -> {
                     history.setTypeEvent(TypeEvent.CHANGE_ASSIGNED_USER_FOR_TASK_CREATED_BY_USER);
                     return history;

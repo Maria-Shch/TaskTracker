@@ -45,7 +45,7 @@ public class AuthController {
         userValidator.validate(newUser, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "auth/registration";
         }
         userService.addUser(newUser);
         return "auth/login";

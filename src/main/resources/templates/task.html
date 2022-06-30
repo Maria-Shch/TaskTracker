@@ -7,40 +7,48 @@
     <link th:href="@{/css/header.css}" href="../src/main/resources/static/css/header.css" rel="stylesheet">
 </head>
     <body>
-        <header class="header">
-            <div class="d-text-page">
-                <p class="title"> The task</p>
-            </div>
-            <div class="container">
-                <a class="title" href="/task/assignedTasks">
-                    ALL TASKS
-                </a>
+    <header class="header">
+        <div class="d-text-page">
+            <p class="title">Task</p>
+        </div>
+        <div class="container">
+            <a class="title" href="/task/allTasks/all">
+                ALL TASKS
+            </a>
 
-                <a class="title" href="/task/assignedTasks">
-                    ASSIGNED TASKS
-                </a>
+            <hr class="hr">
 
-                <a class="title" href="/task/createdTasks">
-                    CREATED TASKS
-                </a>
+            <a class="title" href="/task/assignedTasks">
+                ASSIGNED TASKS
+            </a>
 
-                <a class="title" href="/statistics">
-                    STATISTICS
-                </a>
+            <hr class="hr">
 
-                <a class="title" href="/history">
-                    HISTORY
-                </a>
+            <a class="title" href="/task/createdTasks">
+                CREATED TASKS
+            </a>
 
-                <form  class="form-account" th:action="@{/user/account}" method="get">
-                    <input class="input-account" type="submit" name="" value="">
-                </form>
+            <hr class="hr">
 
-                <form  class="form-account" action="/auth/logout" method="post">
-                    <input class="input-logout" type="submit" name="" value="">
-                </form>
-            </div>
-        </header>
+            <a class="title" href="/statistics">
+                STATISTICS
+            </a>
+
+            <hr class="hr">
+
+            <a class="title" href="/history">
+                HISTORY
+            </a>
+
+            <form  class="form-account" th:action="@{/user/account}" method="get">
+                <input class="input-account" type="submit" name="" value="">
+            </form>
+
+            <form  class="form-account" action="/auth/logout" method="post">
+                <input class="input-logout" type="submit" name="" value="">
+            </form>
+        </div>
+    </header>
         <div class="d-container-main">
             <div class="d-title">
                 <p class="p-task-title" th:text="${task.title}"> </p>
