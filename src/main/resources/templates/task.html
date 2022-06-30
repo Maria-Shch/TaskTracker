@@ -136,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-parameters" th:if="${user.role.name() == 'ADMIN'}">
+            <div class="d-parameters" th:if="${user.role.name() == 'ADMIN'} or ${task.userCreator.id == user.id}">
                 <div class="d-parameters-column">
                     <div class="d-parameters-column-row">
                         <div class="d-parameter-big">
