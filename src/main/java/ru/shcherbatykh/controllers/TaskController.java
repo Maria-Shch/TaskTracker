@@ -85,12 +85,14 @@ public class TaskController {
     }
 
     @GetMapping("/create/{idParentTask}")
-    public String createTask(Model model, @PathVariable long idParentTask) {
+    public String createTask(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long idParentTask) {
+        User user = userService.findByUsername(userDetails.getUsername());
         List<User> users = userService.users();
         sortUsersByLastnameAndName(users);
 
         model.addAttribute("newTask", new Task());
         model.addAttribute("idParentTask", idParentTask);
+        model.addAttribute("user", user);
         model.addAttribute("users", users);
         return "taskCreate";
     }
@@ -121,11 +123,11 @@ public class TaskController {
     }
 
     @PostMapping("/{idTask}/changeStatus")
-    public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, @Valid Status selectedStatus) {
+    public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask, @Valid Status selectedStatus) {
         User user = userService.findByUsername(userDetails.getUsername());
-        Task task = taskService.getTask(id);
+        Task task = taskService.getTask(idTask);
         if(task.getStatus() != selectedStatus){
-            taskService.updateStatus(id, user, selectedStatus);
+            taskService.updateStatus(idTask, user, selectedStatus);
         }
         return "redirect:/task/{idTask}";
     }
