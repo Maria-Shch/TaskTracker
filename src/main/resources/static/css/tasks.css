@@ -116,7 +116,6 @@
     flex-wrap: nowrap;
     margin-top: 10px;
     align-items: flex-end;
-    border-left: solid #4E79A0 2px;
 }
 
 .div-task{
@@ -125,15 +124,6 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    margin-bottom: 5px;
-}
-
-.div-buttons-tasks{
-    width: 70%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
     margin-bottom: 5px;
 }
 
@@ -152,6 +142,46 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    margin-bottom: 5px;
+}
+
+.div-task-assigned-root{
+    width: 100%;
+    background-color: #ffffde;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.div-task-created-root{
+    width: 100%;
+    background-color: #84a9f970;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+
+.div-task-root{
+    width: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.div-buttons-tasks{
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
     margin-bottom: 5px;
 }
 
@@ -512,3 +542,6 @@
     background-color: #88a4da;
 }
 
+.hr-horizontal{
+    width: 100%;
+}
