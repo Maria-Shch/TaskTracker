@@ -47,11 +47,6 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override @Transactional
-    public void deleteTask(long id) {
-        taskRepository.deleteById(id);
-    }
-
-    @Override @Transactional
     public List<Task> getTasksCreatedByUser(User user){
         return user.getTasksCreatedByUser();
     }

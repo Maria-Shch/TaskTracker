@@ -15,8 +15,6 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 
     Task getTaskById(long id);
 
-    void deleteById(long id);
-
     @Query(value =
             "WITH RECURSIVE r AS ( \n" +
             "    SELECT id FROM tasks WHERE parent_task_id = :id \n" +

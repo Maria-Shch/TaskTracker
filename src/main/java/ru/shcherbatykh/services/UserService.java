@@ -17,11 +17,5 @@ public interface UserService {
     User getUser(long id);
 
     @Transactional
-    void deleteUser(long id);
-
-    @Transactional
-    List<User> getUsersByRole(Role role);
-
-    @Transactional
     User findByUsername(String username);
 }

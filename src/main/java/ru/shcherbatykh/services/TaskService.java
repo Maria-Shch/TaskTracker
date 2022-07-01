@@ -19,9 +19,6 @@ public interface TaskService {
     Task getTask(long id);
 
     @Transactional
-    void deleteTask(long id);
-
-    @Transactional
     List<Task> getTasksCreatedByUser(User user);
 
     @Transactional

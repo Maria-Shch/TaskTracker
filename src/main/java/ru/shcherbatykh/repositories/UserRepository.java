@@ -15,8 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User getUserById(long id);
 
-    void deleteById(long id);
-
     List<User> findByRole(Role role);
 
     Optional<User> findByUsername(String username);

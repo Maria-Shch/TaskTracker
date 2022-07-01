@@ -18,27 +18,12 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override @Transactional
-    public List<Comment> getComments() {
-        return commentRepository.findAll();
-    }
-
-    @Override @Transactional
     public void addComment(Comment comment) {
         commentRepository.save(comment);
     }
 
     @Override @Transactional
-    public Comment getComment(long id) {
-        return commentRepository.getCommentById(id);
-    }
-
-    @Override @Transactional
     public List<Comment> getCommentsByTask(Task task) {
         return commentRepository.findByTask(task);
-    }
-
-    @Override @Transactional
-    public void deleteComment(long id) {
-        commentRepository.deleteById(id);
     }
 }

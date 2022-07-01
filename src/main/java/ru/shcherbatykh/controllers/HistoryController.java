@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.shcherbatykh.classes.*;
 import ru.shcherbatykh.models.History;
 import ru.shcherbatykh.models.User;
-import ru.shcherbatykh.services.CommentService;
 import ru.shcherbatykh.services.HistoryService;
-import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
 import java.util.*;
@@ -24,20 +22,18 @@ import static java.util.Comparator.reverseOrder;
 public class HistoryController {
     private final UserService userService;
     private final HistoryService historyService;
-    private final TaskService taskService;
-    private final CommentService commentService;
 
-    public HistoryController(UserService userService, HistoryService historyService, TaskService taskService, CommentService commentService) {
+    public HistoryController(UserService userService, HistoryService historyService) {
         this.userService = userService;
         this.historyService = historyService;
-        this.taskService = taskService;
-        this.commentService = commentService;
     }
 
     @GetMapping("")
     public String getHistory(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         String idUser = String.valueOf(user.getId());
+
+        //By default, the history page displays history for the last 3 days
         List<History> histories = historyService.getHistoriesOfLastNDays(3);
 
         List<History> resultList = Stream.of(

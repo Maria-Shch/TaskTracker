@@ -11,6 +11,7 @@ import ru.shcherbatykh.classes.UpdatableTaskField;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,7 +56,7 @@ public class HistoryServiceImpl implements HistoryService{
     public List<History> getAssignedTasks(List<History> histories, String idUser){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
-                        && history.getNewValue().equals(idUser))
+                        && history.getNewValue() == idUser)
                 .map(history -> {
                     history.setTypeEvent(TypeEvent.ASSIGNED_TASK);
                     return history;
@@ -66,7 +67,7 @@ public class HistoryServiceImpl implements HistoryService{
     @Override @Transactional
     public List<History> getStartedWork(List<History> histories, User user){
         return histories.stream()
-                .filter(history -> history.getUserWhoUpdated() == user
+                .filter(history -> Objects.equals(history.getUserWhoUpdated(), user)
                         && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
                         && history.getOldValue().equals("false"))
                 .map(history -> {
@@ -79,7 +80,7 @@ public class HistoryServiceImpl implements HistoryService{
     @Override @Transactional
     public List<History> getStoppedWork(List<History> histories, User user){
         return histories.stream()
-                .filter(history -> history.getUserWhoUpdated() == user
+                .filter(history -> Objects.equals(history.getUserWhoUpdated(), user)
                         && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
                         && history.getOldValue().equals("true"))
                 .map(history -> {

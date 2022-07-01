@@ -3,7 +3,6 @@ package ru.shcherbatykh.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.transaction.annotation.Transactional;
 import ru.shcherbatykh.classes.Role;
 
 import javax.persistence.*;

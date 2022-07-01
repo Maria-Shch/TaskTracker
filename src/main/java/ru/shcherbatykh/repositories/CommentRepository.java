@@ -11,9 +11,7 @@ import java.util.List;
 public interface CommentRepository extends CrudRepository<Comment, Long> {
     List<Comment> findAll();
 
-    Comment getCommentById(long id);
-
-    void deleteById(long id);
+    Comment getCommentByIdTask(long idTask);
 
     List<Comment> findByTask(Task task);
 }
