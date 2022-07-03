@@ -114,7 +114,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin-top: 10px;
+    margin-top: -10px;
     align-items: flex-end;
 }
 
@@ -145,35 +145,16 @@
     margin-bottom: 5px;
 }
 
-.div-task-assigned-root{
+.div-t{
     width: 100%;
-    background-color: #ffffde;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
-    margin-bottom: 5px;
-    margin-top: 20px;
 }
 
-.div-task-created-root{
+.div-padding{
     width: 100%;
-    background-color: #84a9f970;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    margin-bottom: 5px;
-    margin-top: 20px;
-}
-
-
-.div-task-root{
-    width: 100%;
-    background-color: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    margin-bottom: 5px;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .div-buttons-tasks{
