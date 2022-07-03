@@ -90,7 +90,7 @@
                               ({typeTasks == 'assigned'} and {task.userExecutor ==  user} ? 'div-task-assigned' : '') +
                               (typeTasks == 'all' ? 'div-task' : '')}">
                 <div class="d-task-title"  th:style="'width:' + @{${35-task.space}} + '%'">
-                    <p class="p-task-title" th:text="${task.title}"> </p>
+                    <a th:href="@{/task/{id}(id=${task.id})}" th:text="${task.title}" class="p-task-title"></a>
                 </div>
                 <div class="d-task-activity">
                     <p class="p-active" th:if="${task.activityStatus == true}">ACTIVE</p>

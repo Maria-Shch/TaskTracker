@@ -66,13 +66,18 @@
                         <div class="d-parameter">
                             <p class="p-parameter">Reporter</p>
                         </div>
-                        <p class="p-user-and-date" th:text="${task.userCreator.name + ' ' + task.userCreator.lastname}"></p>
+                        <a th:href="@{/user/{id}(id=${task.userCreator.id})}"
+                           th:text="${task.userCreator.name + ' ' + task.userCreator.lastname}"
+                           class="p-user-and-date"></a>
                     </div>
                     <div class="d-parameters-column-row">
                         <div class="d-parameter">
                             <p class="p-parameter">Assignee</p>
                         </div>
-                        <p class="p-user-and-date" th:if="${task.userExecutor != null}" th:text="${task.userExecutor.name + ' ' + task.userExecutor.lastname}"></p>
+                        <a th:href="@{/user/{id}(id=${task.userExecutor.id})}"
+                           th:if="${task.userExecutor != null}"
+                           th:text="${task.userExecutor.name + ' ' + task.userExecutor.lastname}"
+                           class="p-user-and-date"></a>
                     </div>
                     <div class="d-parameters-column-row">
                         <div class="d-parameter">
