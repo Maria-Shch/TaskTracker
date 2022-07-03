@@ -1,6 +1,8 @@
 package ru.shcherbatykh.services;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.shcherbatykh.classes.Period;
+import ru.shcherbatykh.classes.TaskType;
 import ru.shcherbatykh.models.History;
 import ru.shcherbatykh.models.Task;
 import ru.shcherbatykh.models.User;
@@ -14,6 +16,12 @@ public interface HistoryService {
     List<History> getHistories();
 
     List<History> getHistoriesOfLastNDays(int countMinusDays);
+
+    List<History> getHistoriesOfPeriod(Period period);
+
+    List<History> filterHistoriesByTaskType(List<History> histories, TaskType taskType, User user);
+
+    List<History> filterHistoriesByChangedFiled(List<History> histories, UpdatableTaskField changedField);
 
     @Transactional
     List<History> historyOfTask(Task task);
@@ -29,26 +37,26 @@ public interface HistoryService {
             (Task task, User user, LocalDateTime periodTimeStart, LocalDateTime periodTimeFinish);
 
     @Transactional
-    List<History> getAssignedTasks(List<History> histories, String idUser);
+    List<History> getRecordsWhereUserWasAssignedAsExecutor(List<History> histories, User User);
 
     @Transactional
-    List<History> getStartedWork(List<History> histories, User user);
+    List<History> getStartOfWorkOnTaskRecordsByUser(List<History> histories, User user);
 
     @Transactional
-    List<History> getStoppedWork(List<History> histories, User user);
+    List<History> getStopOfWorkOnTaskRecordsByUser(List<History> histories, User user);
 
     @Transactional
-    List<History> getChangedDeadlineByExecutor(List<History> histories, User user);
+    List<History> getDeadlineChangeRecordsForTasksWhereUserIsAssignedAsExecutor(List<History> histories, User user);
 
     @Transactional
-    List<History> getChangedStatusByExecutor(List<History> histories, User user);
+    List<History> getStatusChangeRecordsForTasksWhereUserIsAssignedAsExecutor(List<History> histories, User user);
 
     @Transactional
-    List<History> getChangedStatusForTaskCreatedByUser(List<History> histories, User user);
+    List<History> getStatusChangeRecordsForTasksCreatedByUser(List<History> histories, User user);
 
     @Transactional
-    List<History> getChangedDeadlineForTaskCreatedByUser(List<History> histories, User user);
+    List<History> getDeadlineChangeRecordsForTasksCreatedByUser(List<History> histories, User user);
 
     @Transactional
-    List<History> getChangeAssignedUserForTaskCreatedByUser(List<History> histories, User user);
+    List<History> getUserExecutorChangeRecordsForTasksCreatedByUser(List<History> histories, User user);
 }

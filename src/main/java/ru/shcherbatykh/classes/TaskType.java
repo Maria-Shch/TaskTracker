@@ -2,6 +2,6 @@ package ru.shcherbatykh.classes;
 
 public enum TaskType {
     ALL,
-    CREATED_BY_THIS_USER,
-    ASSIGNED_TO_THIS_USER
+    TASKS_CREATED_BY_THIS_USER,
+    TASKS_ASSIGNED_TO_THIS_USER
 }

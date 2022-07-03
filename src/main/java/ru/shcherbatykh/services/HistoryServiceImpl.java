@@ -2,6 +2,8 @@ package ru.shcherbatykh.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.shcherbatykh.classes.Period;
+import ru.shcherbatykh.classes.TaskType;
 import ru.shcherbatykh.classes.TypeEvent;
 import ru.shcherbatykh.models.History;
 import ru.shcherbatykh.models.Task;
@@ -10,9 +12,11 @@ import ru.shcherbatykh.repositories.HistoryRepository;
 import ru.shcherbatykh.classes.UpdatableTaskField;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class HistoryServiceImpl implements HistoryService{
@@ -35,6 +39,75 @@ public class HistoryServiceImpl implements HistoryService{
         LocalDateTime finishOfPeriod = LocalDateTime.now();
         LocalDateTime startOfPeriod =finishOfPeriod.minusDays(countMinusDays);
         return historyRepository.findAllOfLastThreeDays(startOfPeriod, finishOfPeriod);
+    }
+
+    @Override
+    public List<History> getHistoriesOfPeriod(Period period) {
+        return switch(period) {
+            case ALL -> getHistories();
+            case THIS_DAY -> getHistoriesOfLastNDays(1);
+            case THREE_DAYS -> getHistoriesOfLastNDays(3);
+            case THIS_WEEK -> getHistoriesOfLastNDays(7);
+            case THIS_MONTH -> getHistoriesOfLastNDays(30);
+        };
+    }
+
+    @Override
+    public List<History> filterHistoriesByTaskType(List<History> histories, TaskType taskType, User user) {
+        return switch(taskType) {
+            case ALL -> Stream.of(
+                            getRecordsWhereUserWasAssignedAsExecutor(histories, user),
+                            getStartOfWorkOnTaskRecordsByUser(histories, user),
+                            getStopOfWorkOnTaskRecordsByUser(histories, user),
+                            getDeadlineChangeRecordsForTasksWhereUserIsAssignedAsExecutor(histories, user),
+                            getStatusChangeRecordsForTasksWhereUserIsAssignedAsExecutor(histories, user),
+                            getStatusChangeRecordsForTasksCreatedByUser(histories, user),
+                            getDeadlineChangeRecordsForTasksCreatedByUser(histories, user),
+                            getUserExecutorChangeRecordsForTasksCreatedByUser(histories, user))
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+
+            case TASKS_ASSIGNED_TO_THIS_USER ->  Stream.of(
+                            getRecordsWhereUserWasAssignedAsExecutor(histories, user),
+                            getStartOfWorkOnTaskRecordsByUser(histories, user),
+                            getStopOfWorkOnTaskRecordsByUser(histories, user),
+                            getDeadlineChangeRecordsForTasksWhereUserIsAssignedAsExecutor(histories, user),
+                            getStatusChangeRecordsForTasksWhereUserIsAssignedAsExecutor(histories, user))
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+
+            case TASKS_CREATED_BY_THIS_USER -> Stream.of(
+                            getStatusChangeRecordsForTasksCreatedByUser(histories, user),
+                            getDeadlineChangeRecordsForTasksCreatedByUser(histories, user),
+                            getUserExecutorChangeRecordsForTasksCreatedByUser(histories, user))
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        };
+    }
+
+    @Override
+    public List<History> filterHistoriesByChangedFiled(List<History> histories, UpdatableTaskField changedField) {
+        return switch(changedField) {
+            case ALL -> histories;
+
+            case STATUS -> histories.stream()
+                    .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS)
+                    .collect(Collectors.toList());
+
+            case ACTIVITY_STATUS -> histories.stream()
+                    .filter(history -> history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS)
+                    .collect(Collectors.toList());
+
+            case DATE_DEADLINE -> histories.stream()
+                    .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE)
+                    .collect(Collectors.toList());
+
+            case ID_USER_EXECUTOR -> histories.stream()
+                    .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR)
+                    .collect(Collectors.toList());
+
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override @Transactional
@@ -74,10 +147,10 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getAssignedTasks(List<History> histories, String idUser){
+    public List<History> getRecordsWhereUserWasAssignedAsExecutor(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
-                        && history.getNewValue() == idUser)
+                        && history.getNewValue() == String.valueOf(user.getId()))
                 .map(history -> {
                     history.setTypeEvent(TypeEvent.ASSIGNED_TASK);
                     return history;
@@ -86,7 +159,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getStartedWork(List<History> histories, User user){
+    public List<History> getStartOfWorkOnTaskRecordsByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> Objects.equals(history.getUserWhoUpdated(), user)
                         && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
@@ -99,7 +172,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getStoppedWork(List<History> histories, User user){
+    public List<History> getStopOfWorkOnTaskRecordsByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> Objects.equals(history.getUserWhoUpdated(), user)
                         && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
@@ -112,7 +185,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getChangedDeadlineByExecutor(List<History> histories, User user){
+    public List<History> getDeadlineChangeRecordsForTasksWhereUserIsAssignedAsExecutor(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE
                         && history.getTask().getUserExecutor() != null
@@ -125,7 +198,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getChangedStatusByExecutor(List<History> histories, User user){
+    public List<History> getStatusChangeRecordsForTasksWhereUserIsAssignedAsExecutor(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
                         && history.getTask().getUserExecutor() != null
@@ -138,7 +211,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getChangedStatusForTaskCreatedByUser(List<History> histories, User user){
+    public List<History> getStatusChangeRecordsForTasksCreatedByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
                         && history.getTask().getUserCreator().getId() == user.getId())
@@ -150,7 +223,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getChangedDeadlineForTaskCreatedByUser(List<History> histories, User user){
+    public List<History> getDeadlineChangeRecordsForTasksCreatedByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE
                         && history.getTask().getUserCreator().getId() == user.getId())
@@ -162,7 +235,7 @@ public class HistoryServiceImpl implements HistoryService{
     }
 
     @Override @Transactional
-    public List<History> getChangeAssignedUserForTaskCreatedByUser(List<History> histories, User user){
+    public List<History> getUserExecutorChangeRecordsForTasksCreatedByUser(List<History> histories, User user){
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
                         && history.getTask().getUserCreator().getId() == user.getId())

@@ -13,7 +13,6 @@ import ru.shcherbatykh.services.UserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Comparator.reverseOrder;
 
@@ -31,120 +30,42 @@ public class HistoryController {
     @GetMapping("")
     public String getHistory(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
-        String idUser = String.valueOf(user.getId());
 
         //By default, the history page displays history for the last 3 days
         List<History> histories = historyService.getHistoriesOfLastNDays(3);
-
-        List<History> resultList = Stream.of(
-                    historyService.getAssignedTasks(histories, idUser),
-                    historyService.getStartedWork(histories, user),
-                    historyService.getStoppedWork(histories, user),
-                    historyService.getChangedDeadlineByExecutor(histories, user),
-                    historyService.getChangedStatusByExecutor(histories, user),
-                    historyService.getChangedStatusForTaskCreatedByUser(histories, user),
-                    historyService.getChangedDeadlineForTaskCreatedByUser(histories, user),
-                    historyService.getChangeAssignedUserForTaskCreatedByUser(histories, user))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+        List<History> resultList = historyService.filterHistoriesByTaskType(histories, TaskType.ALL, user);
 
         Collections.sort(resultList, Comparator.comparing(History::getDate, reverseOrder()));
-
-        resultList = resultList.stream()
-                .distinct()
-                .collect(Collectors.toList());
-
+        resultList = resultList.stream().distinct().collect(Collectors.toList());
         resultList = historyService.fillInFieldsOldAndNewUserExecutors(resultList);
-
-        List<Period> periods = List.of(Period.ALL, Period.THIS_DAY, Period.THREE_DAYS, Period.THIS_WEEK, Period.THIS_MONTH);
-        List<TaskType> taskTypes = List.of(TaskType.ALL, TaskType.ASSIGNED_TO_THIS_USER, TaskType.CREATED_BY_THIS_USER);
-        List<UpdatableTaskField> changedFields = List.of(UpdatableTaskField.ALL, UpdatableTaskField.STATUS,
-                UpdatableTaskField.ACTIVITY_STATUS, UpdatableTaskField.DATE_DEADLINE, UpdatableTaskField.ID_USER_EXECUTOR);
 
         model.addAttribute("user", user);
         model.addAttribute("resultList", resultList);
-        model.addAttribute("periods", periods);
-        model.addAttribute("taskTypes", taskTypes);
-        model.addAttribute("changedFields", changedFields);
+        model.addAttribute("periods", Period.values());
+        model.addAttribute("taskTypes", TaskType.values());
+        model.addAttribute("changedFields", UpdatableTaskField.values());
         model.addAttribute("sortingHistory", new SortingHistory(Period.THREE_DAYS, TaskType.ALL, UpdatableTaskField.ALL));
         return "history";
     }
 
     @PostMapping("")
-    public String getHistories(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute("sortingHistory") SortingHistory sortingHistory, Model model) {
+    public String getHistories(@AuthenticationPrincipal UserDetails userDetails, Model model,
+                               @ModelAttribute("sortingHistory") SortingHistory sortingHistory) {
         User user = userService.findByUsername(userDetails.getUsername());
-        String idUser = String.valueOf(user.getId());
 
-        List<History> histories = switch(sortingHistory.getPeriod()) {
-            case ALL -> historyService.getHistories();
-            case THIS_DAY -> historyService.getHistoriesOfLastNDays(1);
-            case THREE_DAYS -> historyService.getHistoriesOfLastNDays(3);
-            case THIS_WEEK -> historyService.getHistoriesOfLastNDays(7);
-            case THIS_MONTH -> historyService.getHistoriesOfLastNDays(30);
-        };
+        List<History> histories = historyService.getHistoriesOfPeriod(sortingHistory.getPeriod());
+        histories = historyService.filterHistoriesByTaskType(histories, sortingHistory.getTaskType(), user);
+        histories =  historyService.filterHistoriesByChangedFiled(histories, sortingHistory.getChangedField());
 
-        List<History> resultHistories = switch(sortingHistory.getTaskType()) {
-            case ALL -> Stream.of(
-                        historyService.getAssignedTasks(histories, idUser), //ASSIGNED_TO_THIS_USER
-                        historyService.getStartedWork(histories, user), //ASSIGNED_TO_THIS_USER
-                        historyService.getStoppedWork(histories, user), //ASSIGNED_TO_THIS_USER
-                        historyService.getChangedDeadlineByExecutor(histories, user), //ASSIGNED_TO_THIS_USER
-                        historyService.getChangedStatusByExecutor(histories, user),  //ASSIGNED_TO_THIS_USER
-                        historyService.getChangedStatusForTaskCreatedByUser(histories, user), //CREATED_BY_THIS_USER
-                        historyService.getChangedDeadlineForTaskCreatedByUser(histories, user), //CREATED_BY_THIS_USER
-                        historyService.getChangeAssignedUserForTaskCreatedByUser(histories, user))  //CREATED_BY_THIS_USER
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
-
-            case ASSIGNED_TO_THIS_USER ->  Stream.of(
-                        historyService.getAssignedTasks(histories, idUser), //ASSIGNED_TO_THIS_USER
-                        historyService.getStartedWork(histories, user), //ASSIGNED_TO_THIS_USER
-                        historyService.getStoppedWork(histories, user), //ASSIGNED_TO_THIS_USER
-                        historyService.getChangedDeadlineByExecutor(histories, user), //ASSIGNED_TO_THIS_USER
-                        historyService.getChangedStatusByExecutor(histories, user))//ASSIGNED_TO_THIS_USER
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
-
-            case CREATED_BY_THIS_USER -> Stream.of(
-                        historyService.getChangedStatusForTaskCreatedByUser(histories, user), //CREATED_BY_THIS_USER
-                        historyService.getChangedDeadlineForTaskCreatedByUser(histories, user), //CREATED_BY_THIS_USER
-                        historyService.getChangeAssignedUserForTaskCreatedByUser(histories, user)) //CREATED_BY_THIS_USER
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
-        };
-
-        List<History> result =  switch(sortingHistory.getChangedField()) {
-            case ALL -> resultHistories;
-            case STATUS -> resultHistories.stream()
-                    .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS)
-                    .collect(Collectors.toList());
-            case ACTIVITY_STATUS -> resultHistories.stream()
-                    .filter(history -> history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS)
-                    .collect(Collectors.toList());
-            case DATE_DEADLINE -> resultHistories.stream()
-                    .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE)
-                    .collect(Collectors.toList());
-            case ID_USER_EXECUTOR -> resultHistories.stream()
-                    .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR)
-                    .collect(Collectors.toList());
-            default -> throw new IllegalArgumentException();
-        };
-
-        Collections.sort(result, Comparator.comparing(History::getDate, reverseOrder()));
-        result = result.stream().distinct().collect(Collectors.toList());
-
-        result = historyService.fillInFieldsOldAndNewUserExecutors(result);
-
-        List<Period> periods = List.of(Period.ALL, Period.THIS_DAY, Period.THREE_DAYS, Period.THIS_WEEK, Period.THIS_MONTH);
-        List<TaskType> taskTypes = List.of(TaskType.ALL, TaskType.ASSIGNED_TO_THIS_USER, TaskType.CREATED_BY_THIS_USER);
-        List<UpdatableTaskField> changedFields = List.of(UpdatableTaskField.ALL, UpdatableTaskField.STATUS,
-                UpdatableTaskField.ACTIVITY_STATUS, UpdatableTaskField.DATE_DEADLINE, UpdatableTaskField.ID_USER_EXECUTOR);
+        Collections.sort(histories, Comparator.comparing(History::getDate, reverseOrder()));
+        histories = histories.stream().distinct().collect(Collectors.toList());
+        histories = historyService.fillInFieldsOldAndNewUserExecutors(histories);
 
         model.addAttribute("user", user);
-        model.addAttribute("resultList", result);
-        model.addAttribute("periods", periods);
-        model.addAttribute("taskTypes", taskTypes);
-        model.addAttribute("changedFields", changedFields);
+        model.addAttribute("resultList", histories);
+        model.addAttribute("periods", Period.values());
+        model.addAttribute("taskTypes", TaskType.values());
+        model.addAttribute("changedFields", UpdatableTaskField.values());
         model.addAttribute("sortingHistory", new SortingHistory(sortingHistory.getPeriod(), sortingHistory.getTaskType(),
                 sortingHistory.getChangedField()));
         return "history";
