@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 public class HistoryServiceImpl implements HistoryService{
 
     private final HistoryRepository historyRepository;
+    private final UserService userService;
 
-    public HistoryServiceImpl(HistoryRepository historyRepository) {
+    public HistoryServiceImpl(HistoryRepository historyRepository, UserService userService) {
         this.historyRepository = historyRepository;
+        this.userService = userService;
     }
 
     @Override @Transactional
@@ -44,6 +46,25 @@ public class HistoryServiceImpl implements HistoryService{
     public void recordTaskFieldChange(Task task, User userWhoUpdated, UpdatableTaskField field, String oldValue, String newValue){
         historyRepository.save(new History(task, userWhoUpdated, field, oldValue, newValue));
     }
+
+    @Override
+    public List<History> fillInFieldsOldAndNewUserExecutors(List<History> originalList) {
+        return originalList.stream()
+                .map(task ->{
+                    if (task.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR){
+                        if(task.getOldValue() != null)
+                            task.setOldUserExecutor(userService.getUser(task.getOldValue()));
+                        task.setNewUserExecutor(userService.getUser(task.getNewValue()));
+                    }
+                    return task;
+                })
+                .collect(Collectors.toList());
+    }
+
+//    @Override @Transactional todo clear if unused
+//    public List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUser(Task task, User user){
+//        return historyRepository.findByTaskAndUserWhoUpdatedAndTaskFieldIs(task, user, UpdatableTaskField.ACTIVITY_STATUS);
+//    }
 
     @Override @Transactional
     public List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod

@@ -17,5 +17,8 @@ public interface UserService {
     User getUser(long id);
 
     @Transactional
+    User getUser(String id);
+
+    @Transactional
     User findByUsername(String username);
 }

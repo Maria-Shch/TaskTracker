@@ -38,8 +38,17 @@ public class History {
     @CreationTimestamp
     private LocalDateTime date;
 
+
+    // This field for sorting histories
     @Transient
     private TypeEvent typeEvent;
+
+    // These fields are filled in when the UserExecutor field was updated
+    @Transient
+    private User oldUserExecutor;
+
+    @Transient
+    private User newUserExecutor;
 
     public History(Task task, User userWhoUpdated, UpdatableTaskField taskField, String oldValue, String newValue) {
         this.task = task;

@@ -22,6 +22,9 @@ public interface HistoryService {
     void recordTaskFieldChange(Task task, User user, UpdatableTaskField field, String oldValue, String newValue);
 
     @Transactional
+    List<History> fillInFieldsOldAndNewUserExecutors(List<History> originalList);
+
+    @Transactional
     List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod
             (Task task, User user, LocalDateTime periodTimeStart, LocalDateTime periodTimeFinish);
 

@@ -42,6 +42,15 @@
     border-radius: 5px;
 }
 
+.a-history-not-assigned{
+    color: #7b0507ba;
+    font-size: 20px;
+    text-decoration: none;
+    background-color: #5e15152e;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px;
+}
+
 .TODO{
     color: #8B8984;
     background-color: rgba(139, 137, 132, 0.25);
@@ -97,9 +106,10 @@
     background-color: #FFFFFF;
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     margin-bottom: 5px;
     align-items: center;
+    padding-left: 10px;
 }
 
 .div-history-date{

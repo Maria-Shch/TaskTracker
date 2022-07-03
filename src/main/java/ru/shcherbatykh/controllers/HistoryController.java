@@ -49,7 +49,12 @@ public class HistoryController {
                 .collect(Collectors.toList());
 
         Collections.sort(resultList, Comparator.comparing(History::getDate, reverseOrder()));
-        resultList = resultList.stream().distinct().collect(Collectors.toList());
+
+        resultList = resultList.stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+        resultList = historyService.fillInFieldsOldAndNewUserExecutors(resultList);
 
         List<Period> periods = List.of(Period.ALL, Period.THIS_DAY, Period.THREE_DAYS, Period.THIS_WEEK, Period.THIS_MONTH);
         List<TaskType> taskTypes = List.of(TaskType.ALL, TaskType.ASSIGNED_TO_THIS_USER, TaskType.CREATED_BY_THIS_USER);
@@ -127,6 +132,8 @@ public class HistoryController {
 
         Collections.sort(result, Comparator.comparing(History::getDate, reverseOrder()));
         result = result.stream().distinct().collect(Collectors.toList());
+
+        result = historyService.fillInFieldsOldAndNewUserExecutors(result);
 
         List<Period> periods = List.of(Period.ALL, Period.THIS_DAY, Period.THREE_DAYS, Period.THIS_WEEK, Period.THIS_MONTH);
         List<TaskType> taskTypes = List.of(TaskType.ALL, TaskType.ASSIGNED_TO_THIS_USER, TaskType.CREATED_BY_THIS_USER);
