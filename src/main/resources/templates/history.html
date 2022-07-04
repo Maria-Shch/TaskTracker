@@ -52,20 +52,20 @@
 <div class="div-main-container">
     <form class="form-container" method="post" th:action="@{/history}">
         <select class="select-param" name="period">
-            <option th:each="period : ${periods}" th:value=${period} th:text="${period}"></option>
+            <option th:each="period : ${periods}" th:value=${period} th:text="${period.displayValue}"></option>
         </select>
         <select class="select-param" name="taskType">
-            <option th:each="taskType : ${taskTypes}" th:value=${taskType} th:text="${taskType}"></option>
+            <option th:each="taskType : ${taskTypes}" th:value=${taskType} th:text="${taskType.displayValue}"></option>
         </select>
         <select class="select-param" name="changedField">
-            <option th:each="changedField : ${changedFields}" th:value=${changedField} th:text="${changedField}"></option>
+            <option th:each="changedField : ${changedFields}" th:value=${changedField} th:text="${changedField.displayValue}"></option>
         </select>
         <button class="b-filter" type="submit">Filter</button>
     </form>
     <div class="div-parameters-filter">
-        <p th:text="'Period: ' + ${sortingHistory.period.name()}" class="p-text-filter-param"></p>
-        <p th:text="'Task type: ' + ${sortingHistory.taskType.name()}" class="p-text-filter-param"></p>
-        <p th:text="'Changed parameter: ' + ${sortingHistory.changedField.name()}" class="p-text-filter-param"></p>
+        <p th:text="'Period: ' + ${sortingHistory.period.displayValue}" class="p-text-filter-param"></p>
+        <p th:text="'Task type: ' + ${sortingHistory.taskType.displayValue}" class="p-text-filter-param"></p>
+        <p th:text="'Changed parameter: ' + ${sortingHistory.changedField.displayValue}" class="p-text-filter-param"></p>
     </div>
     <div class="div-histories">
         <div th:each="history : ${resultList}">

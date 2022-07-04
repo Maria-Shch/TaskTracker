@@ -55,7 +55,7 @@ public class HistoryServiceImpl implements HistoryService{
     @Override
     public List<History> filterHistoriesByTaskType(List<History> histories, TaskType taskType, User user) {
         return switch(taskType) {
-            case ALL -> Stream.of(
+            case TASKS_CREATED_BY_THIS_USER_OR_ASSIGNED_TO_THIS_USER -> Stream.of(
                             getRecordsWhereUserWasAssignedAsExecutor(histories, user),
                             getStartOfWorkOnTaskRecordsByUser(histories, user),
                             getStopOfWorkOnTaskRecordsByUser(histories, user),

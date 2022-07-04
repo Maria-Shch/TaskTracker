@@ -33,18 +33,21 @@ public class HistoryController {
 
         //By default, the history page displays history for the last 3 days
         List<History> histories = historyService.getHistoriesOfLastNDays(3);
-        List<History> resultList = historyService.filterHistoriesByTaskType(histories, TaskType.ALL, user);
+        List<History> resultList = historyService.filterHistoriesByTaskType(histories, TaskType.TASKS_CREATED_BY_THIS_USER_OR_ASSIGNED_TO_THIS_USER, user);
 
         Collections.sort(resultList, Comparator.comparing(History::getDate, reverseOrder()));
         resultList = resultList.stream().distinct().collect(Collectors.toList());
         resultList = historyService.fillInFieldsOldAndNewUserExecutors(resultList);
 
+        List<UpdatableTaskField> changedFields = List.of(UpdatableTaskField.ALL, UpdatableTaskField.STATUS,
+                UpdatableTaskField.ACTIVITY_STATUS, UpdatableTaskField.DATE_DEADLINE, UpdatableTaskField.ID_USER_EXECUTOR);
+
         model.addAttribute("user", user);
         model.addAttribute("resultList", resultList);
         model.addAttribute("periods", Period.values());
         model.addAttribute("taskTypes", TaskType.values());
-        model.addAttribute("changedFields", UpdatableTaskField.values());
-        model.addAttribute("sortingHistory", new SortingHistory(Period.THREE_DAYS, TaskType.ALL, UpdatableTaskField.ALL));
+        model.addAttribute("changedFields", changedFields);
+        model.addAttribute("sortingHistory", new SortingHistory(Period.THREE_DAYS, TaskType.TASKS_CREATED_BY_THIS_USER_OR_ASSIGNED_TO_THIS_USER, UpdatableTaskField.ALL));
         return "history";
     }
 
@@ -61,11 +64,14 @@ public class HistoryController {
         histories = histories.stream().distinct().collect(Collectors.toList());
         histories = historyService.fillInFieldsOldAndNewUserExecutors(histories);
 
+        List<UpdatableTaskField> changedFields = List.of(UpdatableTaskField.ALL, UpdatableTaskField.STATUS,
+                UpdatableTaskField.ACTIVITY_STATUS, UpdatableTaskField.DATE_DEADLINE, UpdatableTaskField.ID_USER_EXECUTOR);
+
         model.addAttribute("user", user);
         model.addAttribute("resultList", histories);
         model.addAttribute("periods", Period.values());
         model.addAttribute("taskTypes", TaskType.values());
-        model.addAttribute("changedFields", UpdatableTaskField.values());
+        model.addAttribute("changedFields", changedFields);
         model.addAttribute("sortingHistory", new SortingHistory(sortingHistory.getPeriod(), sortingHistory.getTaskType(),
                 sortingHistory.getChangedField()));
         return "history";

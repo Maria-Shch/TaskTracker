@@ -1,10 +1,19 @@
 package ru.shcherbatykh.classes;
 
 public enum Period {
-    ALL, THIS_DAY, THREE_DAYS, THIS_WEEK, THIS_MONTH;
+    ALL("All time"),
+    THIS_DAY("This day"),
+    THREE_DAYS("Three days"),
+    THIS_WEEK("This week"),
+    THIS_MONTH("This month");
 
-    @Override
-    public String toString() {
-        return this.name();
+    private final String displayValue;
+
+    Period(String displayValue) {
+        this.displayValue = displayValue;
+    }
+
+    public String getDisplayValue() {
+        return displayValue;
     }
 }
