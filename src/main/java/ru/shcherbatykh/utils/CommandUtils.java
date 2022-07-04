@@ -61,6 +61,18 @@ public class CommandUtils {
         });
     }
 
+    public static void sortUsersByLastnameAndNameWithMainUser(List<User> users, User mainUser){
+        Collections.sort(users, (user1, user2) -> {
+            if (user1.equals(mainUser)) return -1;
+            if (user2.equals(mainUser)) return 1;
+            if (user1.getLastname().equals(user1.getLastname())) {
+                return user1.getName().compareTo(user2.getName());
+            } else {
+                return user1.getLastname().compareTo(user2.getLastname());
+            }
+        });
+    }
+
     public static LocalDateTime convertLocalDateTimeFromString(String dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         return LocalDateTime.parse(dateTime, formatter);
