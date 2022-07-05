@@ -59,4 +59,16 @@ public interface HistoryService {
 
     @Transactional
     List<History> getUserExecutorChangeRecordsForTasksCreatedByUser(List<History> histories, User user);
+
+    @Transactional
+    LocalDateTime getTheEarliestDateOfActivityStatusChangeByUser(User user);
+
+    @Transactional
+    LocalDateTime getTheLatestDateOfActivityStatusChangeByUser(User user);
+
+    @Transactional
+    boolean isPresentRecordWithParams(User user, Task task, LocalDateTime startPeriod, LocalDateTime finishPeriod);
+
+    @Transactional
+    History checkUserWorkingInPeriod(User user, LocalDateTime startOfPeriod);
 }

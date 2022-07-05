@@ -42,7 +42,7 @@ public class TaskController {
     public String taskDisactivate(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask) {
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateActivityStatus(idTask, user,false);
-        return "redirect:/task/{id}";
+        return "redirect:/task/{idTask}";
     }
 
     @GetMapping("/{idTask}/activate")
@@ -155,6 +155,7 @@ public class TaskController {
     public String getAssignedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksInHierarchicalOrder();
+
         List<Task> resultTaskList = tasks.stream()
                 .filter(task -> Objects.equals(task.getUserExecutor(), user))
                 .collect(Collectors.toList());

@@ -37,8 +37,8 @@ public class HistoryServiceImpl implements HistoryService{
     @Override
     public List<History> getHistoriesOfLastNDays(int countMinusDays) {
         LocalDateTime finishOfPeriod = LocalDateTime.now();
-        LocalDateTime startOfPeriod =finishOfPeriod.minusDays(countMinusDays);
-        return historyRepository.findAllOfLastThreeDays(startOfPeriod, finishOfPeriod);
+        LocalDateTime startOfPeriod = finishOfPeriod.minusDays(countMinusDays);
+        return historyRepository.findAllBetweenStartAndFinish(startOfPeriod, finishOfPeriod);
     }
 
     @Override
@@ -133,12 +133,7 @@ public class HistoryServiceImpl implements HistoryService{
                 })
                 .collect(Collectors.toList());
     }
-
-//    @Override @Transactional todo clear if unused
-//    public List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUser(Task task, User user){
-//        return historyRepository.findByTaskAndUserWhoUpdatedAndTaskFieldIs(task, user, UpdatableTaskField.ACTIVITY_STATUS);
-//    }
-
+    
     @Override @Transactional
     public List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod
             (Task task, User user, LocalDateTime periodTimeStart, LocalDateTime periodTimeFinish){
@@ -244,5 +239,35 @@ public class HistoryServiceImpl implements HistoryService{
                     return history;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override @Transactional
+    public LocalDateTime getTheEarliestDateOfActivityStatusChangeByUser(User user) {
+        return historyRepository.getTheEarliestDateOfActivityStatusChangeByUser(user.getId());
+    }
+
+    @Override @Transactional
+    public LocalDateTime getTheLatestDateOfActivityStatusChangeByUser(User user) {
+        return historyRepository.getTheLatestDateOfActivityStatusChangeByUser(user.getId());
+    }
+
+    @Override @Transactional
+    public boolean isPresentRecordWithParams(User user, Task task, LocalDateTime startPeriod, LocalDateTime finishPeriod){
+        Long count = historyRepository.getCountRecordsWithParams(task.getId(), user.getId(), startPeriod, finishPeriod);
+        System.out.println(task.getTitle() + "  " + count);
+        return count > 0;
+    }
+
+    @Override
+    public History checkUserWorkingInPeriod(User user, LocalDateTime startOfPeriod) {
+        LocalDateTime LastLDTBeforeStartOfPeriod =
+                historyRepository.getLDTForLastRecordAboutActivityStatusChangedBeforeTime(user.getId(), startOfPeriod);
+
+        History history = historyRepository.findHistoryByDate(LastLDTBeforeStartOfPeriod);
+
+        System.out.println("");System.out.println("");System.out.println("");System.out.println("");
+        System.out.println(history);
+        System.out.println("");System.out.println("");System.out.println("");System.out.println("");
+        return history;
     }
 }

@@ -36,6 +36,11 @@ public interface TaskService {
     @Transactional
     List<Task> getTasksInHierarchicalOrder();
 
+    @Transactional
+    List<Task> getTasksForStatisticsAnalysis(String idTask, User user, boolean isTaskWithChildren,  LocalDateTime startPeriod, LocalDateTime finishPeriod);
+
+    List<Task> filterTasksUserWorkedInPeriod(List<Task> tasks, User user, LocalDateTime startPeriod, LocalDateTime finishPeriod);
+
     // All update methods are responsible for writing a row about update to the History table
     // HistoryService is used for this
     @Transactional

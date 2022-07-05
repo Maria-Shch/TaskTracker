@@ -6,7 +6,7 @@
     <link th:href="@{/css/task.css}" href="../src/main/resources/static/css/task.css" rel="stylesheet">
     <link th:href="@{/css/header.css}" href="../src/main/resources/static/css/header.css" rel="stylesheet">
 </head>
-    <body>
+<body>
     <header class="header">
         <div class="d-text-page">
             <p class="title">Task</p>
@@ -49,144 +49,144 @@
             </form>
         </div>
     </header>
-        <div class="d-container-main">
-            <div class="d-title">
-                <p class="p-task-title" th:text="${task.title}"> </p>
+    <div class="d-container-main">
+        <div class="d-title">
+            <p class="p-task-title" th:text="${task.title}"> </p>
 
-                <a class="a-title" th:href="@{'~/task/create/' + ${task.id}}">
-                    CREATE SUBTASK
-                </a>
-            </div>
-            <div class="d-description">
-                <p class="p-task-description" th:text="${task.description}"></p>
-            </div>
-            <div class="d-parameters">
-                <div class="d-parameters-column">
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Reporter</p>
-                        </div>
-                        <a th:href="@{/user/{id}(id=${task.userCreator.id})}"
-                           th:text="${task.userCreator.name + ' ' + task.userCreator.lastname}"
-                           class="p-user-and-date"></a>
+            <a class="a-title" th:href="@{'~/task/create/' + ${task.id}}">
+                CREATE SUBTASK
+            </a>
+        </div>
+        <div class="d-description">
+            <p class="p-task-description" th:text="${task.description}"></p>
+        </div>
+        <div class="d-parameters">
+            <div class="d-parameters-column">
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Reporter</p>
                     </div>
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Assignee</p>
-                        </div>
-                        <a th:href="@{/user/{id}(id=${task.userExecutor.id})}"
-                           th:if="${task.userExecutor != null}"
-                           th:text="${task.userExecutor.name + ' ' + task.userExecutor.lastname}"
-                           class="p-user-and-date"></a>
-                    </div>
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Start date</p>
-                        </div>
-                        <p class="p-user-and-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateCreation)}"> </p>
-                    </div>
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Due date</p>
-                        </div>
-                        <p class="p-user-and-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateDeadline)}"> </p>
-                    </div>
+                    <a th:href="@{/user/{id}(id=${task.userCreator.id})}"
+                       th:text="${task.userCreator.name + ' ' + task.userCreator.lastname}"
+                       class="p-user-and-date"></a>
                 </div>
-                <div class="d-parameters-column">
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Activity status</p>
-                        </div>
-
-                        <p class="p-active" th:if="${task.activityStatus == true}">ACTIVE</p>
-                        <p class="p-inactive" th:if="${task.activityStatus == false}">INACTIVE</p>
-
-                        <div th:if="${task.userExecutor != null} and ${user.id == task.userExecutor.id}">
-                            <form class="form-activate" th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == true}"
-                                  th:action="@{'/task/' + ${task.id}} + '/disactivate/'" method="get">
-                                <input class="input-disactivate" type="submit" value="Deactivate"/>
-                            </form>
-                            <form class="form-activate" th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == false}"
-                                  th:action="@{'/task/' + ${task.id}} + '/activate/'" method="get">
-                                <input class="input-activate" type="submit" value="Activate"/>
-                            </form>
-                            <form class="form-activate" th:if="${task.status.name() == 'TODO'}"
-                                  th:action="@{'/task/' + ${task.id}} + '/accept/'" method="get">
-                                <input class="input-accept" type="submit" value="Accept"/>
-                            </form>
-                        </div>
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Assignee</p>
                     </div>
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Status</p>
-                        </div>
-                        <p class="p-todo" th:if="${task.status.name() == 'TODO'}">TODO</p>
-                        <p class="p-accepted" th:if="${task.status.name() == 'ACCEPTED'}">ACCEPTED</p>
-                        <p class="p-in-progress" th:if="${task.status.name() == 'IN_PROGRESS'}">IN PROGRESS</p>
-                        <p class="p-done" th:if="${task.status.name() == 'DONE'}">DONE</p>
-                        <p class="p-canceled" th:if="${task.status.name() == 'CANCELED'}">CANCELED</p>
+                    <a th:href="@{/user/{id}(id=${task.userExecutor.id})}"
+                       th:if="${task.userExecutor != null}"
+                       th:text="${task.userExecutor.name + ' ' + task.userExecutor.lastname}"
+                       class="p-user-and-date"></a>
+                </div>
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Start date</p>
                     </div>
-                    <div class="d-parameters-column-row" th:if="${statuses.size != 0}">
-                        <div class="d-parameter">
-                            <p class="p-parameter">Change status</p>
-                        </div>
-                        <div class="d-change-status">
-                            <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeStatus'" th:method="post">
-                                <select class="form-control" name="selectedStatus">
-                                    <option th:each="status : ${statuses}" th:value="${status.name}" th:text="${status.name}"></option>
-                                </select>
-                                <button  class="button-change-status" type="submit">Submit</button>
-                            </form>
-                        </div>
+                    <p class="p-user-and-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateCreation)}"> </p>
+                </div>
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Due date</p>
                     </div>
+                    <p class="p-user-and-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateToStringForPrint(task.dateDeadline)}"> </p>
                 </div>
             </div>
-            <div class="d-parameters" th:if="${user.role.name() == 'ADMIN'} or ${task.userCreator.id == user.id}">
-                <div class="d-parameters-column">
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter-big">
-                            <p class="p-parameter">Change due date</p>
-                        </div>
+            <div class="d-parameters-column">
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Activity status</p>
+                    </div>
 
-                        <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeDueDate'" method="post">
-                            <input class="input-date" type="datetime-local" id="newDueDate" name="newDueDate"/>
-                            <button class="button-change-status" type="submit">Change</button>
+                    <p class="p-active" th:if="${task.activityStatus == true}">ACTIVE</p>
+                    <p class="p-inactive" th:if="${task.activityStatus == false}">INACTIVE</p>
+
+                    <div th:if="${task.userExecutor != null} and ${user.id == task.userExecutor.id}">
+                        <form class="form-activate" th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == true}"
+                              th:action="@{'/task/' + ${task.id}} + '/disactivate/'" method="get">
+                            <input class="input-disactivate" type="submit" value="Deactivate"/>
+                        </form>
+                        <form class="form-activate" th:if="${task.status.name() != 'TODO'} and ${task.status.name() != 'DONE'} and ${task.status.name() != 'CANCELED'} and ${task.activityStatus == false}"
+                              th:action="@{'/task/' + ${task.id}} + '/activate/'" method="get">
+                            <input class="input-activate" type="submit" value="Activate"/>
+                        </form>
+                        <form class="form-activate" th:if="${task.status.name() == 'TODO'}"
+                              th:action="@{'/task/' + ${task.id}} + '/accept/'" method="get">
+                            <input class="input-accept" type="submit" value="Accept"/>
                         </form>
                     </div>
-                    <div class="d-parameters-column-row">
-                        <div class="d-parameter-big">
-                            <p class="p-parameter">Change assignee user</p>
-                        </div>
-                        <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeUserExecutor'" method="post">
-                            <select class="form-control" name="idNewUserExecutor">
-                                <option th:value=${0} th:text="'User executor'"></option>
-                                <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
+                </div>
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Status</p>
+                    </div>
+                    <p class="p-todo" th:if="${task.status.name() == 'TODO'}">TODO</p>
+                    <p class="p-accepted" th:if="${task.status.name() == 'ACCEPTED'}">ACCEPTED</p>
+                    <p class="p-in-progress" th:if="${task.status.name() == 'IN_PROGRESS'}">IN PROGRESS</p>
+                    <p class="p-done" th:if="${task.status.name() == 'DONE'}">DONE</p>
+                    <p class="p-canceled" th:if="${task.status.name() == 'CANCELED'}">CANCELED</p>
+                </div>
+                <div class="d-parameters-column-row" th:if="${statuses.size != 0}">
+                    <div class="d-parameter">
+                        <p class="p-parameter">Change status</p>
+                    </div>
+                    <div class="d-change-status">
+                        <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeStatus'" th:method="post">
+                            <select class="form-control" name="selectedStatus">
+                                <option th:each="status : ${statuses}" th:value="${status.name}" th:text="${status.name}"></option>
                             </select>
-                            <button class="button-change-status" type="submit">Change</button>
+                            <button  class="button-change-status" type="submit">Submit</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="d-comments">
-                <div class="d-comments-title">
-                    <p class="p-task-title">Comments</p>
-                </div>
-                <div class="d-comment" th:if="${comments.size != 0}" th:each="comment : ${comments}">
-                    <div class="d-comments-parameters">
-                        <p class="p-user" th:text="${comment.user.name + ' ' + comment.user.lastname}"></p>
-                        <p class="p-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(comment.date)}"></p>
+        </div>
+        <div class="d-parameters" th:if="${user.role.name() == 'ADMIN'} or ${task.userCreator.id == user.id}">
+            <div class="d-parameters-column">
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter-big">
+                        <p class="p-parameter">Change due date</p>
                     </div>
-                    <div class="d-comments-text">
-                        <p class="p-comment-text" th:text="${comment.text}"></p>
-                    </div>
+
+                    <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeDueDate'" method="post">
+                        <input class="input-date" type="datetime-local" id="newDueDate" name="newDueDate"/>
+                        <button class="button-change-status" type="submit">Change</button>
+                    </form>
                 </div>
-                <div class="div-add-comment">
-                    <form class="form-add-container" method="post" th:action="@{'/task/' + ${task.id}} + '/addcomment'">
-                        <textarea class="t-area-comment" type="text" id="textComment" name="textComment"> </textarea>
-                        <button class="button-comment" type="submit">Send</button>
+                <div class="d-parameters-column-row">
+                    <div class="d-parameter-big">
+                        <p class="p-parameter">Change assignee user</p>
+                    </div>
+                    <form class="form-date" th:action="@{'/task/' + ${task.id}} + '/changeUserExecutor'" method="post">
+                        <select class="form-control" name="idNewUserExecutor">
+                            <option th:value=${0} th:text="'User executor'"></option>
+                            <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
+                        </select>
+                        <button class="button-change-status" type="submit">Change</button>
                     </form>
                 </div>
             </div>
         </div>
-    </body>
+        <div class="d-comments">
+            <div class="d-comments-title">
+                <p class="p-task-title">Comments</p>
+            </div>
+            <div class="d-comment" th:if="${comments.size != 0}" th:each="comment : ${comments}">
+                <div class="d-comments-parameters">
+                    <p class="p-user" th:text="${comment.user.name + ' ' + comment.user.lastname}"></p>
+                    <p class="p-date" th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(comment.date)}"></p>
+                </div>
+                <div class="d-comments-text">
+                    <p class="p-comment-text" th:text="${comment.text}"></p>
+                </div>
+            </div>
+            <div class="div-add-comment">
+                <form class="form-add-container" method="post" th:action="@{'/task/' + ${task.id}} + '/addcomment'">
+                    <textarea class="t-area-comment" type="text" id="textComment" name="textComment"> </textarea>
+                    <button class="button-comment" type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
 </html>

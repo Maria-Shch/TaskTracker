@@ -125,6 +125,52 @@ public class TaskServiceImpl implements TaskService{
         return resultList;
     }
 
+    @Override @Transactional
+    public List<Task> getTasksForStatisticsAnalysis(String idTask, User user, boolean isTaskWithChildren,
+                                                    LocalDateTime startPeriod, LocalDateTime finishPeriod){
+        List<Task> rootTasks = new ArrayList<>();
+        List<Task> resultList = new ArrayList<>();
+
+        if (idTask.equals("all")){
+            System.out.println("Was signed ALL TASKS");
+            rootTasks = getTasks().stream()
+                    .filter(task -> task.getParentTask() == null)
+                    .collect(Collectors.toList());
+        }
+        else{
+            rootTasks.add(getTask(Long.valueOf(idTask)));
+            System.out.println("SELECTED TASK " + getTask(Long.valueOf(idTask)));
+        }
+
+        System.out.println("rootTasks LIST");
+        rootTasks.forEach(System.out::println);
+
+        if(isTaskWithChildren){
+            resultList.addAll(rootTasks);
+            for(Task task : rootTasks){
+                resultList.addAll(getAllChildTasks(task));
+            }
+        }
+        else resultList.addAll(rootTasks);
+
+        System.out.println("RESULT LIST BEFORE FILTER");
+        resultList.forEach(System.out::println);
+
+        resultList = filterTasksUserWorkedInPeriod(resultList, user, startPeriod, finishPeriod);
+
+        System.out.println("RESULT LIST AFTER FILTER");
+        resultList.forEach(System.out::println);
+
+        return resultList;
+    }
+
+    @Override
+    public List<Task> filterTasksUserWorkedInPeriod(List<Task> tasks, User user, LocalDateTime startPeriod, LocalDateTime finishPeriod){
+        return tasks.stream()
+                .filter(task -> historyService.isPresentRecordWithParams(user, task, startPeriod, finishPeriod))
+                .collect(Collectors.toList());
+    }
+
     // All update methods are responsible for writing a row about update to the History table
     // HistoryService is used for this
     @Override @Transactional
