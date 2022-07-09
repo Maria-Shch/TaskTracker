@@ -71,7 +71,7 @@ public class TaskServiceImpl implements TaskService{
 
     @Override @Transactional
     public void deactivateActiveTaskUser(User user){
-        List<Task> tasks = getTasksAssignedToUser(user);
+        List<Task> tasks = user.getTasksAssignedToUser();
 
         Task activeTask = tasks.stream()
                 .filter(task -> task.isActivityStatus())
@@ -168,6 +168,14 @@ public class TaskServiceImpl implements TaskService{
     public List<Task> filterTasksUserWorkedInPeriod(List<Task> tasks, User user, LocalDateTime startPeriod, LocalDateTime finishPeriod){
         return tasks.stream()
                 .filter(task -> historyService.isPresentRecordWithParams(user, task, startPeriod, finishPeriod))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Task> getTasksUserHasEverWorkedOn(User user) {
+        List<Long> idTasks = taskRepository.getIdTasksUserHasEverWorkedOn(user.getId());
+        return idTasks.stream()
+                .map(idTask -> getTask(idTask))
                 .collect(Collectors.toList());
     }
 
