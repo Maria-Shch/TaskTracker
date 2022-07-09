@@ -42,7 +42,7 @@ public class StatisticsController {
     public String getStatistics(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         model.addAttribute("user", user);
-        model.addAttribute("tasks", taskService.getTasks());
+        model.addAttribute("tasks", taskService.getTasksUserHasEverWorkedOn(user));
         model.addAttribute("isResponse", false);
         return "statistics";
     }

@@ -54,11 +54,14 @@
         <div th:if="${exceptionStartAfterFinish != null}">
             <p th:text="${exceptionStartAfterFinish}" class="p-error"></p>
         </div>
-        <form class="form-container" method="post" th:action="@{/statistics}">
+        <div th:if="${tasks.size() == 0}" class="form-container">
+            <p class="p-text">You have not worked on any task</p>
+        </div>
+        <form th:if="${tasks.size() != 0}" class="form-container" method="post" th:action="@{/statistics}">
             <input class="input-date" type="datetime-local" id="startPeriod" name="startPeriod"/>
             <input class="input-date" type="datetime-local" id="finishPeriod" name="finishPeriod"/>
             <select class="select-task" name="idTask">
-                <option th:value=${"all"} th:text="'All tasks'"></option>
+                <option th:value=${"all"} th:text="'All tasks you have ever worked on'"></option>
                 <option th:each="task : ${tasks}" th:value=${task.id} th:text="${task.title}"></option>
             </select>
             <p class="p-text">Get duration for this task</p>
