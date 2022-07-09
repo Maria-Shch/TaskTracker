@@ -141,7 +141,7 @@ public class StatisticsController {
         model.addAttribute("elapsedTimeAsString", elapsedTimeAsString);
         model.addAttribute("startPeriod", startPeriodLDT);
         model.addAttribute("finishPeriod", finishPeriodLDT);
-        model.addAttribute("tasks", taskService.getTasks());
+        model.addAttribute("tasks", taskService.getTasksUserHasEverWorkedOn(loggedInUser));
         model.addAttribute("isTaskWithChildren", isTaskWithChildren);
         model.addAttribute("isResponse", true);
         return "statistics";
