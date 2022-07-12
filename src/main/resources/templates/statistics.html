@@ -50,7 +50,7 @@
     </div>
 </header>
 <div class="d-container-main">
-    <div class="d-parameters">
+    <div th:if="${user.role.name() == 'USER'}" class="d-parameters">
         <div th:if="${exceptionStartAfterFinish != null}">
             <p th:text="${exceptionStartAfterFinish}" class="p-error"></p>
         </div>
@@ -104,6 +104,75 @@
             <p th:if="${selectedTask == 'all'}" class="p-text">you didn't work on tasks </p>
 
             <p th:if="${selectedTask != 'all'}" class="p-text">you didn't work on task </p>
+            <a th:if="${selectedTask != 'all'}" th:href="@{/task/{id}(id=${selectedTask.id})}"
+               th:text="${selectedTask.title}" class="a-task-title"></a>
+        </div>
+    </div>
+    <div th:if="${user.role.name() == 'ADMIN'}" class="d-parameters">
+        <div th:if="${exceptionStartAfterFinish != null}">
+            <p th:text="${exceptionStartAfterFinish}" class="p-error"></p>
+        </div>
+        <form th:if="${isUserSelected == false} and ${isResponse == false}" class="form-container" method="post" th:action="@{/statistics/selectUser}">
+            <select class="select-task" name="idUser">
+                <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
+            </select>
+            <p class="p-text"> Select user</p>
+            <button class="b-statistics" type="submit">
+                OK
+            </button>
+        </form>
+        <p th:if="${isUserSelected == true} and ${tasks.size() == 0}"
+           th:text="${selectedUser.lastname + ' ' + selectedUser.name + ' did not work on any task.'}">
+        </p>
+        <form  th:if="${isUserSelected == true} and ${tasks.size() != 0}" class="form-container" method="post" th:action="@{/statistics}">
+            <p class="p-text" th:text="${'Statistics for ' + selectedUser.lastname + ' ' + selectedUser.name}"></p>
+            <input class="input-date" type="datetime-local" id="startPeriod1" name="startPeriod"/>
+            <input class="input-date" type="datetime-local" id="finishPeriod1" name="finishPeriod"/>
+            <select class="select-task" name="idTask">
+                <option th:value=${"all"} th:text="'All tasks user have ever worked on'"></option>
+                <option th:each="task : ${tasks}" th:value=${task.id} th:text="${task.title}"></option>
+            </select>
+            <p class="p-text">Get duration for this task</p>
+            <button class="b-statistics" type="submit" name="isTaskWithChildren" value="false">
+                Get
+            </button>
+            <p class="p-text"> Get the duration for the task and its children</p>
+            <button class="b-statistics" type="submit" name="isTaskWithChildren" value="true">
+                Get
+            </button>
+        </form>
+
+        <div th:if="${isResponse == true} and ${elapsedTimeAsString != null}" class="div-result-text">
+            <p class="p-text"> During the period from </p>
+            <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(startPeriod)}" class="p-text-date"></p>
+            <p class="p-text">  to </p>
+            <p th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(finishPeriod)}" class="p-text-date"></p>
+            <p class="p-text">user worked on task </p>
+            <div  th:each="task : ${tasksForStatisticsAnalysis}">
+                <a th:href="@{/task/{id}(id=${task.id})}" th:text="${task.title}" class="a-task-title"></a>
+            </div>
+            <p class="p-text"> for </p>
+            <p class="p-result" th:text="${elapsedTimeAsString}"></p>
+        </div>
+        <div th:if="${isResponse == true} and ${elapsedTimeAsString == null}" class="div-result-text">
+            <p th:if="${startPeriod != null} or ${finishPeriod != null}" class="p-text">
+                During the period from
+            </p>
+            <p th:if="${startPeriod != null} or ${finishPeriod != null}"
+               th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(startPeriod)}"
+               class="p-text-date">
+            </p>
+            <p th:if="${startPeriod != null} or ${finishPeriod != null}" class="p-text">
+                to
+            </p>
+            <p th:if="${startPeriod != null} or ${finishPeriod != null}"
+               th:text="${T(ru.shcherbatykh.utils.CommandUtils).convertDateAndTimeToStringForPrint(finishPeriod)}"
+               class="p-text-date">
+            </p>
+
+            <p th:if="${selectedTask == 'all'}" class="p-text">user didn't work on tasks </p>
+
+            <p th:if="${selectedTask != 'all'}" class="p-text">user didn't work on task </p>
             <a th:if="${selectedTask != 'all'}" th:href="@{/task/{id}(id=${selectedTask.id})}"
                th:text="${selectedTask.title}" class="a-task-title"></a>
         </div>

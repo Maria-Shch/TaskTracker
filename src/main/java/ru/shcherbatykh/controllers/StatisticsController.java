@@ -1,5 +1,6 @@
 package ru.shcherbatykh.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -13,14 +14,11 @@ import ru.shcherbatykh.services.StatisticalService;
 import ru.shcherbatykh.services.TaskService;
 import ru.shcherbatykh.services.UserService;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static ru.shcherbatykh.utils.CommandUtils.convertLocalDateTimeFromString;
-import static ru.shcherbatykh.utils.CommandUtils.convertPeriodOfTimeToString;
+import static ru.shcherbatykh.utils.CommandUtils.*;
 
 @Controller
 @RequestMapping("/statistics")
@@ -41,9 +39,13 @@ public class StatisticsController {
     @GetMapping("")
     public String getStatistics(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
+        List<User> users = userService.users();
+        sortUsersByLastnameAndName(users);
         model.addAttribute("user", user);
+        model.addAttribute("users", users);
         model.addAttribute("tasks", taskService.getTasksUserHasEverWorkedOn(user));
         model.addAttribute("isResponse", false);
+        model.addAttribute("isUserSelected", false);
         return "statistics";
     }
 
@@ -94,6 +96,7 @@ public class StatisticsController {
             model.addAttribute("tasks", taskService.getTasks());
             model.addAttribute("isTaskWithChildren", isTaskWithChildren);
             model.addAttribute("isResponse", true);
+            model.addAttribute("isUserSelected", false);
             return "statistics";
         }
 
@@ -141,9 +144,27 @@ public class StatisticsController {
         model.addAttribute("elapsedTimeAsString", elapsedTimeAsString);
         model.addAttribute("startPeriod", startPeriodLDT);
         model.addAttribute("finishPeriod", finishPeriodLDT);
-        model.addAttribute("tasks", taskService.getTasksUserHasEverWorkedOn(loggedInUser));
+        model.addAttribute("tasks", taskService.getTasksUserHasEverWorkedOn(user));
         model.addAttribute("isTaskWithChildren", isTaskWithChildren);
         model.addAttribute("isResponse", true);
+        model.addAttribute("isUserSelected", false);
+        return "statistics";
+    }
+
+    @PostMapping("/selectUser")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String selectUser(@AuthenticationPrincipal UserDetails userDetails, Model model,
+                             @ModelAttribute("idUser") String idUser) {
+
+        User loggedInUser = userService.findByUsername(userDetails.getUsername());
+        User selectedUser = userService.getUser(idUser);
+
+        System.out.println("loggedInUser " + loggedInUser);
+
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("selectedUser", selectedUser);
+        model.addAttribute("tasks", taskService.getTasksUserHasEverWorkedOn(selectedUser));
+        model.addAttribute("isUserSelected", true);
         return "statistics";
     }
 }
