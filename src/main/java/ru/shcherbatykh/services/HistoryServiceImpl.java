@@ -133,7 +133,7 @@ public class HistoryServiceImpl implements HistoryService{
                 })
                 .collect(Collectors.toList());
     }
-    
+
     @Override @Transactional
     public List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod
             (Task task, User user, LocalDateTime periodTimeStart, LocalDateTime periodTimeFinish){

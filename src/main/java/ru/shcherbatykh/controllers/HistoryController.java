@@ -63,7 +63,10 @@ public class HistoryController {
     public String getHistories(@AuthenticationPrincipal UserDetails userDetails, Model model,
                                @ModelAttribute("sortingHistory") SortingHistory sortingHistory) {
         User user = userService.findByUsername(userDetails.getUsername());
-        User selectedUser = userService.getUser(sortingHistory.getIdSelectedUser());
+        User selectedUser;
+        if(user.getRole() == Role.ADMIN){
+            selectedUser = userService.getUser(sortingHistory.getIdSelectedUser());
+        } else selectedUser = user;
 
         List<History> histories = historyService.getHistoriesOfPeriod(sortingHistory.getPeriod());
         histories = historyService.filterHistoriesByTaskType(histories, sortingHistory.getTaskType(), selectedUser);

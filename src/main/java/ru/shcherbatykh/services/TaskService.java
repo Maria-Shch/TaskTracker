@@ -19,12 +19,6 @@ public interface TaskService {
     Task getTask(long id);
 
     @Transactional
-    List<Task> getTasksCreatedByUser(User user);
-
-    @Transactional
-    List<Task> getTasksAssignedToUser(User user);
-
-    @Transactional
     List<Task> getAllChildTasks(Task task);
 
     @Transactional

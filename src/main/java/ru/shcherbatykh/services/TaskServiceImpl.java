@@ -9,10 +9,7 @@ import ru.shcherbatykh.repositories.TaskRepository;
 import ru.shcherbatykh.classes.UpdatableTaskField;
 
 import java.time.LocalDateTime;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.shcherbatykh.utils.CommandUtils.sortTasksByStatus;
@@ -44,16 +41,6 @@ public class TaskServiceImpl implements TaskService{
     @Override @Transactional
     public Task getTask(long id) {
         return taskRepository.getTaskById(id);
-    }
-
-    @Override @Transactional
-    public List<Task> getTasksCreatedByUser(User user){
-        return user.getTasksCreatedByUser();
-    }
-
-    @Override @Transactional
-    public List<Task> getTasksAssignedToUser(User user){
-        return user.getTasksAssignedToUser();
     }
 
     @Override @Transactional
