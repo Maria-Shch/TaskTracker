@@ -1,6 +1,7 @@
 package ru.shcherbatykh.security;
 
 import lombok.Data;
+import org.apache.log4j.Logger;
 import ru.shcherbatykh.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ public class SecurityUser implements UserDetails {
     private final String username;
     private final String password;
     private final List<SimpleGrantedAuthority> authorities;
+    private static final Logger logger = Logger.getLogger(SecurityUser.class);
 
     public SecurityUser(String username, String password, List<SimpleGrantedAuthority> authorities) {
         this.username = username;
@@ -48,6 +50,8 @@ public class SecurityUser implements UserDetails {
     }
 
     public static UserDetails fromUser(User user) {
+        logger.debug("Method 'fromUser' started working.");
+
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),

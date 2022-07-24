@@ -1,5 +1,6 @@
 package ru.shcherbatykh.controllers;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +24,12 @@ import static ru.shcherbatykh.utils.CommandUtils.*;
 @Controller
 @RequestMapping("/statistics")
 public class StatisticsController {
+
     private final UserService userService;
     private final StatisticalService statisticalService;
     private final TaskService taskService;
     private final HistoryService historyService;
+    private static final Logger logger = Logger.getLogger(StatisticsController.class);
 
     public StatisticsController(UserService userService, StatisticalService statisticalService, TaskService taskService,
                                 HistoryService historyService) {
@@ -38,6 +41,9 @@ public class StatisticsController {
 
     @GetMapping("")
     public String getStatistics(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+
+        logger.debug("Method 'getStatistics' with @GetMapping started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         List<User> users = userService.users();
         sortUsersByLastnameAndName(users);
@@ -56,6 +62,9 @@ public class StatisticsController {
                                 @ModelAttribute("finishPeriod") String finishPeriod,
                                 @ModelAttribute("idTask") String idTask,
                                 @RequestParam("isTaskWithChildren") boolean isTaskWithChildren) {
+
+
+        logger.debug("Method 'getStatistics' with @PostMapping started working.");
 
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(isTaskWithChildren);
@@ -155,6 +164,8 @@ public class StatisticsController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String selectUser(@AuthenticationPrincipal UserDetails userDetails, Model model,
                              @ModelAttribute("idUser") String idUser) {
+
+        logger.debug("Method 'selectUser' started working.");
 
         User loggedInUser = userService.findByUsername(userDetails.getUsername());
         User selectedUser = userService.getUser(idUser);

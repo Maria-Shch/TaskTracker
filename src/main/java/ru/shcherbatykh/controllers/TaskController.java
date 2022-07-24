@@ -1,5 +1,6 @@
 package ru.shcherbatykh.controllers;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -28,9 +29,11 @@ import static ru.shcherbatykh.utils.CommandUtils.sortUsersByLastnameAndName;
 @Controller
 @RequestMapping("/task")
 public class TaskController {
+
     private final UserService userService;
     private final TaskService taskService;
     private final CommentService commentService;
+    private static final Logger logger = Logger.getLogger(TaskController.class);
 
     public TaskController(UserService userService, TaskService taskService, CommentService commentService) {
         this.userService = userService;
@@ -40,6 +43,8 @@ public class TaskController {
 
     @GetMapping("/{idTask}/disactivate")
     public String taskDisactivate(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask) {
+        logger.debug("Method 'taskDisactivatestarted working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateActivityStatus(idTask, user,false);
         return "redirect:/task/{idTask}";
@@ -47,6 +52,8 @@ public class TaskController {
 
     @GetMapping("/{idTask}/activate")
     public String taskActivate(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask) {
+        logger.debug("Method 'taskActivate' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
 
         // When the user sets the activity status of the task to "true" (pressed the button "Activate"),
@@ -69,6 +76,8 @@ public class TaskController {
 
     @GetMapping("/{idTask}/accept")
     public String taskAccept(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask) {
+        logger.debug("Method 'taskAccept' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateStatus(idTask, user, Status.ACCEPTED);
         return "redirect:/task/{idTask}";
@@ -77,6 +86,8 @@ public class TaskController {
     @PostMapping("/{idTask}/addcomment")
     public String taskAddComment(@ModelAttribute("textComment") String textComment, @AuthenticationPrincipal UserDetails userDetails,
                                  @PathVariable long idTask) {
+        logger.debug("Method 'taskAddComment' started working.");
+
         Task task = taskService.getTask(idTask);
         User user = userService.findByUsername(userDetails.getUsername());
         Comment comment = new Comment(task, user, textComment);
@@ -86,6 +97,8 @@ public class TaskController {
 
     @GetMapping("/create/{idParentTask}")
     public String createTask(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long idParentTask) {
+        logger.debug("Method 'createTask' with @GetMapping started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         List<User> users = userService.users();
         sortUsersByLastnameAndName(users);
@@ -101,6 +114,8 @@ public class TaskController {
     public String createTask(@ModelAttribute("newTask") Task task, @ModelAttribute("idUserExecutor") Long idUserExecutor,
                              @ModelAttribute("deadline") String deadline, @PathVariable long idParentTask,
                              @AuthenticationPrincipal UserDetails userDetails) {
+
+        logger.debug("Method 'createTask' with @PostMapping started working.");
 
         User user = userService.findByUsername(userDetails.getUsername());
         task.setUserCreator(user);
@@ -124,6 +139,8 @@ public class TaskController {
 
     @PostMapping("/{idTask}/changeStatus")
     public String changeStatusTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask, @Valid Status selectedStatus) {
+        logger.debug("Method 'changeStatusTask' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         Task task = taskService.getTask(idTask);
         if(task.getStatus() != selectedStatus){
@@ -134,6 +151,8 @@ public class TaskController {
 
     @GetMapping("/{idTask}/canceled")
     public String changeStatusTaskCanceled(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask) {
+        logger.debug("Method 'changeStatusTaskCanceled' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         taskService.updateStatus(idTask, user, Status.CANCELED);
         return "redirect:/task/{idTask}";
@@ -141,6 +160,8 @@ public class TaskController {
 
     @GetMapping("/allTasks/{typeTasks}")
     public String getAllTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable String typeTasks) {
+        logger.debug("Method 'getAllTasksPage' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksInHierarchicalOrder();
 
@@ -153,6 +174,8 @@ public class TaskController {
 
     @GetMapping("/assignedTasks")
     public String getAssignedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        logger.debug("Method 'getAssignedUserTasksPage' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksInHierarchicalOrder();
 
@@ -168,6 +191,8 @@ public class TaskController {
 
     @GetMapping("/createdTasks")
     public String getCreatedUserTasksPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        logger.debug("Method 'getCreatedUserTasksPage' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         List<Task> tasks = taskService.getTasksInHierarchicalOrder();
         List<Task> resultTaskList = tasks.stream()
@@ -182,6 +207,8 @@ public class TaskController {
 
     @GetMapping("/{idTask}")
     public String getTaskPage(@AuthenticationPrincipal UserDetails userDetails, Model model, @PathVariable long idTask) {
+        logger.debug("Method 'getTaskPage' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         Task task = taskService.getTask(idTask);
         List<Comment> comments = commentService.getCommentsByTask(task);
@@ -214,6 +241,8 @@ public class TaskController {
     @PostMapping("/{idTask}/changeDueDate")
     public String changeDueDateTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask,
                                     @ModelAttribute("newDueDate") String newDueDate) {
+        logger.debug("Method 'changeDueDateTask' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
 
         // newDueDate length can be 0 when the user tried to change due date
@@ -226,8 +255,10 @@ public class TaskController {
     }
 
     @PostMapping("/{idTask}/changeUserExecutor")
-    public String changeDueDateTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask,
+    public String changeUserExecutor(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long idTask,
                                     @ModelAttribute("idNewUserExecutor") long idNewUserExecutor) {
+        logger.debug("Method 'changeUserExecutor' started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
 
         // idNewUserExecutor can be 0 when the user tried to change user executor

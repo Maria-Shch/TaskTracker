@@ -1,5 +1,6 @@
 package ru.shcherbatykh.services;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shcherbatykh.models.History;
@@ -15,17 +16,20 @@ import java.util.stream.Collectors;
 
 @Service
 public class StatisticalServiceImpl implements StatisticalService {
-    private final TaskService taskService;
-    private final HistoryService historyService;
 
-    public StatisticalServiceImpl(TaskService taskService, HistoryService historyService) {
-        this.taskService = taskService;
+    private final HistoryService historyService;
+    private static final Logger logger = Logger.getLogger(StatisticalServiceImpl.class);
+
+    public StatisticalServiceImpl(HistoryService historyService) {
         this.historyService = historyService;
     }
 
     @Override  @Transactional
     public Long getTimeInMillisSpentByUserOnTaskForPeriod(List<Task> tasks, User user, LocalDateTime startOfPeriod,
                                                           LocalDateTime finishOfPeriod, boolean isTaskWithChildren){
+
+        logger.debug("Method 'getTimeInMillisSpentByUserOnTaskForPeriod' started working.");
+
         List<History> histories = new ArrayList<>();
 
         for (Task task : tasks){

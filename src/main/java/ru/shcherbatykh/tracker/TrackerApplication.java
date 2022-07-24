@@ -1,5 +1,6 @@
 package ru.shcherbatykh.tracker;
 
+import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -22,21 +23,26 @@ import java.util.Locale;
 @ComponentScan (basePackages = "ru.shcherbatykh")
 public class TrackerApplication {
 
+	private static final Logger logger = Logger.getLogger(TrackerApplication.class);
+
 	public static void main(String[] args) {
 		SpringApplication.run(TrackerApplication.class, args);
+		logger.info("========= Application was started =========");
 	}
 
 	@Bean
 	public LocaleResolver localeResolver() {
-		SessionLocaleResolver localResolver=new SessionLocaleResolver();
+		SessionLocaleResolver localResolver = new SessionLocaleResolver();
 		localResolver.setDefaultLocale(Locale.ENGLISH);
+		logger.debug("Bean 'localeResolver' was created.");
 		return localResolver;
 	}
 
 	@Bean(name="messageSource")
-	public ResourceBundleMessageSource bundleMessageSource() {
+	public ResourceBundleMessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("validation");
+		logger.debug("Bean 'messageSource' was created.");
 		return messageSource;
 	}
 }

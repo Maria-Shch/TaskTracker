@@ -1,5 +1,6 @@
 package ru.shcherbatykh.controllers;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,10 @@ import static ru.shcherbatykh.utils.CommandUtils.sortUsersByLastnameAndNameWithM
 @Controller
 @RequestMapping("/history")
 public class HistoryController {
+
     private final UserService userService;
     private final HistoryService historyService;
+    private static final Logger logger = Logger.getLogger(HistoryController.class);
 
     public HistoryController(UserService userService, HistoryService historyService) {
         this.userService = userService;
@@ -29,7 +32,9 @@ public class HistoryController {
     }
 
     @GetMapping("")
-    public String getHistory(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String getHistories(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        logger.debug("Method 'getHistories' with @GetMapping started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
 
         //By default, the history page displays history for the last 3 days
@@ -62,6 +67,9 @@ public class HistoryController {
     @PostMapping("")
     public String getHistories(@AuthenticationPrincipal UserDetails userDetails, Model model,
                                @ModelAttribute("sortingHistory") SortingHistory sortingHistory) {
+
+        logger.debug("Method 'getHistories' with @PostMapping started working.");
+
         User user = userService.findByUsername(userDetails.getUsername());
         User selectedUser;
         if(user.getRole() == Role.ADMIN){

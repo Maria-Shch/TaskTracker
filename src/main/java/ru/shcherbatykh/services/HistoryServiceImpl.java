@@ -1,5 +1,6 @@
 package ru.shcherbatykh.services;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shcherbatykh.classes.Period;
@@ -23,6 +24,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     private final HistoryRepository historyRepository;
     private final UserService userService;
+    private static final Logger logger = Logger.getLogger(HistoryServiceImpl.class);
 
     public HistoryServiceImpl(HistoryRepository historyRepository, UserService userService) {
         this.historyRepository = historyRepository;
@@ -31,11 +33,14 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getHistories() {
+        logger.debug("Method 'getHistories' started working.");
         return historyRepository.findAll();
     }
 
     @Override
     public List<History> getHistoriesOfLastNDays(int countMinusDays) {
+        logger.debug("Method 'getHistoriesOfLastNDays' started working.");
+
         LocalDateTime finishOfPeriod = LocalDateTime.now();
         LocalDateTime startOfPeriod = finishOfPeriod.minusDays(countMinusDays);
         return historyRepository.findAllBetweenStartAndFinish(startOfPeriod, finishOfPeriod);
@@ -43,6 +48,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<History> getHistoriesOfPeriod(Period period) {
+        logger.debug("Method 'getHistoriesOfPeriod' started working.");
         return switch(period) {
             case ALL -> getHistories();
             case THIS_DAY -> getHistoriesOfLastNDays(1);
@@ -54,6 +60,8 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<History> filterHistoriesByTaskType(List<History> histories, TaskType taskType, User user) {
+        logger.debug("Method 'filterHistoriesByTaskType' started working.");
+
         return switch(taskType) {
             case TASKS_CREATED_BY_THIS_USER_OR_ASSIGNED_TO_THIS_USER -> Stream.of(
                             getRecordsWhereUserWasAssignedAsExecutor(histories, user),
@@ -87,6 +95,8 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<History> filterHistoriesByChangedFiled(List<History> histories, UpdatableTaskField changedField) {
+        logger.debug("Method 'filterHistoriesByChangedFiled' started working.");
+
         return switch(changedField) {
             case ALL -> histories;
 
@@ -112,16 +122,19 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> historyOfTask(Task task){
+        logger.debug("Method 'historyOfTask' started working.");
         return historyRepository.findByTask(task);
     }
 
     @Override @Transactional
     public void recordTaskFieldChange(Task task, User userWhoUpdated, UpdatableTaskField field, String oldValue, String newValue){
+        logger.debug("Method 'recordTaskFieldChange' started working.");
         historyRepository.save(new History(task, userWhoUpdated, field, oldValue, newValue));
     }
 
     @Override
     public List<History> fillInFieldsOldAndNewUserExecutors(List<History> originalList) {
+        logger.debug("Method 'fillInFieldsOldAndNewUserExecutors' started working.");
         return originalList.stream()
                 .map(task ->{
                     if (task.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR){
@@ -137,12 +150,16 @@ public class HistoryServiceImpl implements HistoryService{
     @Override @Transactional
     public List<History> getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod
             (Task task, User user, LocalDateTime periodTimeStart, LocalDateTime periodTimeFinish){
+
+        logger.debug("Method 'getHistoriesAboutChangesOfActivityStatusOfTaskByUserForPeriod' started working.");
+
         return historyRepository.findByTaskAndUserWhoUpdatedAndTaskFieldIsAndInPeriod
                 (task.getId(), user.getId(), periodTimeStart, periodTimeFinish);
     }
 
     @Override @Transactional
     public List<History> getRecordsWhereUserWasAssignedAsExecutor(List<History> histories, User user){
+        logger.debug("Method 'getRecordsWhereUserWasAssignedAsExecutor' started working.");
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
                         && history.getNewValue() == String.valueOf(user.getId()))
@@ -155,6 +172,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getStartOfWorkOnTaskRecordsByUser(List<History> histories, User user){
+        logger.debug("Method 'getStartOfWorkOnTaskRecordsByUser' started working.");
         return histories.stream()
                 .filter(history -> Objects.equals(history.getUserWhoUpdated(), user)
                         && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
@@ -168,6 +186,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getStopOfWorkOnTaskRecordsByUser(List<History> histories, User user){
+        logger.debug("Method 'getStopOfWorkOnTaskRecordsByUser' started working.");
         return histories.stream()
                 .filter(history -> Objects.equals(history.getUserWhoUpdated(), user)
                         && history.getTaskField() == UpdatableTaskField.ACTIVITY_STATUS
@@ -181,6 +200,9 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getDeadlineChangeRecordsForTasksWhereUserIsAssignedAsExecutor(List<History> histories, User user){
+
+        logger.debug("Method 'getDeadlineChangeRecordsForTasksWhereUserIsAssignedAsExecutor' started working.");
+
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE
                         && history.getTask().getUserExecutor() != null
@@ -194,6 +216,9 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getStatusChangeRecordsForTasksWhereUserIsAssignedAsExecutor(List<History> histories, User user){
+
+        logger.debug("Method 'getStatusChangeRecordsForTasksWhereUserIsAssignedAsExecutor' started working.");
+
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
                         && history.getTask().getUserExecutor() != null
@@ -207,6 +232,9 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getStatusChangeRecordsForTasksCreatedByUser(List<History> histories, User user){
+
+        logger.debug("Method 'getStatusChangeRecordsForTasksCreatedByUser' started working.");
+
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.STATUS
                         && history.getTask().getUserCreator().getId() == user.getId())
@@ -219,6 +247,9 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getDeadlineChangeRecordsForTasksCreatedByUser(List<History> histories, User user){
+
+        logger.debug("Method 'getDeadlineChangeRecordsForTasksCreatedByUser' started working.");
+
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.DATE_DEADLINE
                         && history.getTask().getUserCreator().getId() == user.getId())
@@ -231,6 +262,9 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public List<History> getUserExecutorChangeRecordsForTasksCreatedByUser(List<History> histories, User user){
+
+        logger.debug("Method 'getUserExecutorChangeRecordsForTasksCreatedByUser' started working.");
+
         return histories.stream()
                 .filter(history -> history.getTaskField() == UpdatableTaskField.ID_USER_EXECUTOR
                         && history.getTask().getUserCreator().getId() == user.getId())
@@ -243,31 +277,31 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override @Transactional
     public LocalDateTime getTheEarliestDateOfActivityStatusChangeByUser(User user) {
+        logger.debug("Method 'getTheEarliestDateOfActivityStatusChangeByUser' started working.");
         return historyRepository.getTheEarliestDateOfActivityStatusChangeByUser(user.getId());
     }
 
     @Override @Transactional
     public LocalDateTime getTheLatestDateOfActivityStatusChangeByUser(User user) {
+        logger.debug("Method 'getTheLatestDateOfActivityStatusChangeByUser' started working.");
         return historyRepository.getTheLatestDateOfActivityStatusChangeByUser(user.getId());
     }
 
     @Override @Transactional
     public boolean isPresentRecordWithParams(User user, Task task, LocalDateTime startPeriod, LocalDateTime finishPeriod){
+        logger.debug("Method 'isPresentRecordWithParams' in class started working.");
         Long count = historyRepository.getCountRecordsWithParams(task.getId(), user.getId(), startPeriod, finishPeriod);
-        System.out.println(task.getTitle() + "  " + count);
         return count > 0;
     }
 
     @Override
     public History checkUserWorkingInPeriod(User user, LocalDateTime startOfPeriod) {
+        logger.debug("Method 'checkUserWorkingInPeriod' in class started working.");
+
         LocalDateTime LastLDTBeforeStartOfPeriod =
                 historyRepository.getLDTForLastRecordAboutActivityStatusChangedBeforeTime(user.getId(), startOfPeriod);
 
         History history = historyRepository.findHistoryByDate(LastLDTBeforeStartOfPeriod);
-
-        System.out.println("");System.out.println("");System.out.println("");System.out.println("");
-        System.out.println(history);
-        System.out.println("");System.out.println("");System.out.println("");System.out.println("");
         return history;
     }
 }
