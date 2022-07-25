@@ -11,9 +11,9 @@ services:
     depends_on:
       - task-tracker-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://task-tracker-db:5432/tasktrackerdb
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://task-tracker-db:5432/${DATABASE_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DATABASE_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DATABASE_PASSWORD}
   task-tracker-db:
     image: postgres
     container_name: task-tracker-db
@@ -21,6 +21,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=tasktrackerdb
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
