@@ -8,6 +8,28 @@ Client-server browser application written in **`Java 15`** using the **`Spring`*
 
 The application has MVCS (Model - View - Controller - Service) architecture. The service layer contains the business logic. Controllers have access to the service layer, and the service layer processes data and communicates with the DAO layer.
 
+## Deployment :whale:
+
+The application can be run using **`Docker`**. The application has `Dockerfile` and `docker-compose.yml`.
+You can use the following commands to run docker containers:
+
+```
+mvn clean package
+```
+
+```
+docker-compose build
+```
+
+```
+docker-compose up
+```
+
+Expected result:
+
+![image](https://user-images.githubusercontent.com/62648024/180817621-48558a0e-3840-46bc-8f14-7dcf9b8d3afa.png)
+
+
 ## Sign in | Sign up :rocket:
 User login and registration pages:
 
@@ -128,6 +150,7 @@ This application is written in **`Java 15`** using these libraries and tools:
 - [PostgreSQL 14.2](https://www.postgresql.org/)
 - [Lombok 1.18.24](https://projectlombok.org/)
 - [log4j 1.2.12](https://logging.apache.org/log4j/2.x/index.html)
+- [Docker Compose 3.9](https://docs.docker.com/compose/)
 
 # Built With :round_pushpin:
 - [Maven](https://maven.apache.org/) - Dependency Management
