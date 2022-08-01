@@ -30,7 +30,10 @@
 
         <hr class="hr">
 
-        <a class="title" href="/statistics">
+        <a th:if="${user.role.name() == 'USER'}" class="title"  th:href="@{/statistics/{id}(id=${user.id})}">
+            STATISTICS
+        </a>
+        <a th:if="${user.role.name() == 'ADMIN'}" class="title"  href="/statistics/selectUser">
             STATISTICS
         </a>
 

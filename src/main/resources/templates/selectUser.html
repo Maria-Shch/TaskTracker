@@ -1,0 +1,69 @@
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Statistics</title>
+  <link th:href="@{/css/header.css}" href="../src/main/resources/static/css/header.css" rel="stylesheet">
+  <link th:href="@{/css/statistics.css}" href="../src/main/resources/static/css/statistics.css" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+  <div class="d-text-page">
+    <p class="title">Statistics</p>
+  </div>
+  <div class="container">
+    <a class="title" href="/task/allTasks/all">
+      ALL TASKS
+    </a>
+
+    <hr class="hr">
+
+    <a class="title" href="/task/assignedTasks">
+      ASSIGNED TASKS
+    </a>
+
+    <hr class="hr">
+
+    <a class="title" href="/task/createdTasks">
+      CREATED TASKS
+    </a>
+
+    <hr class="hr">
+
+    <a th:if="${user.role.name() == 'USER'}" class="title"  th:href="@{/statistics/{id}(id=${user.id})}">
+      STATISTICS
+    </a>
+    <a th:if="${user.role.name() == 'ADMIN'}" class="title"  href="/statistics/selectUser">
+      STATISTICS
+    </a>
+
+    <hr class="hr">
+
+    <a  class="title"  href="/history">
+      HISTORY
+    </a>
+
+    <form  class="form-account" th:action="@{'/user/' + ${user.id}}" method="get">
+      <input class="input-account" type="submit" name="" value="">
+    </form>
+
+    <form  class="form-account" action="/auth/logout" method="post">
+      <input class="input-logout" type="submit" name="" value="">
+    </form>
+  </div>
+</header>
+<div class="d-container-main">
+  <div class="d-parameters">
+    <form class="form-container" method="post" th:action="@{/statistics/selectUser}">
+      <select class="select-task" name="idUser">
+        <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
+      </select>
+      <p class="p-text"> Select user</p>
+      <button class="b-statistics" type="submit">
+        OK
+      </button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

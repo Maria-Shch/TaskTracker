@@ -30,13 +30,16 @@
 
         <hr class="hr">
 
-        <a class="title" href="/statistics">
+        <a th:if="${user.role.name() == 'USER'}" class="title"  th:href="@{/statistics/{id}(id=${user.id})}">
+            STATISTICS
+        </a>
+        <a th:if="${user.role.name() == 'ADMIN'}" class="title"  href="/statistics/selectUser">
             STATISTICS
         </a>
 
         <hr class="hr">
 
-        <a class="title" href="/history">
+        <a  class="title"  href="/history">
             HISTORY
         </a>
 
@@ -57,7 +60,7 @@
         <div th:if="${tasks.size() == 0}" class="form-container">
             <p class="p-text">You have not worked on any task</p>
         </div>
-        <form th:if="${tasks.size() != 0}" class="form-container" method="post" th:action="@{/statistics}">
+        <form th:if="${tasks.size() != 0}" class="form-container" method="post" th:action="@{'/statistics/' + ${user.id}}">
             <input class="input-date" type="datetime-local" id="startPeriod" name="startPeriod"/>
             <input class="input-date" type="datetime-local" id="finishPeriod" name="finishPeriod"/>
             <select class="select-task" name="idTask">
@@ -112,19 +115,11 @@
         <div th:if="${exceptionStartAfterFinish != null}">
             <p th:text="${exceptionStartAfterFinish}" class="p-error"></p>
         </div>
-        <form th:if="${isUserSelected == false} and ${isResponse == false}" class="form-container" method="post" th:action="@{/statistics/selectUser}">
-            <select class="select-task" name="idUser">
-                <option th:each="user : ${users}" th:value=${user.id} th:text="${user.lastname + ' ' + user.name}"></option>
-            </select>
-            <p class="p-text"> Select user</p>
-            <button class="b-statistics" type="submit">
-                OK
-            </button>
-        </form>
-        <p th:if="${isUserSelected == true} and ${tasks.size() == 0}"
+        <p th:if="${tasks.size() == 0}"
            th:text="${selectedUser.lastname + ' ' + selectedUser.name + ' did not work on any task.'}">
         </p>
-        <form  th:if="${isUserSelected == true} and ${tasks.size() != 0}" class="form-container" method="post" th:action="@{/statistics}">
+        <form  th:if="${tasks.size() != 0}" class="form-container" method="post"
+               th:action="@{/statistics/{idSelectedUser}(idSelectedUser=${selectedUser.id})}">
             <p class="p-text" th:text="${'Statistics for ' + selectedUser.lastname + ' ' + selectedUser.name}"></p>
             <input class="input-date" type="datetime-local" id="startPeriod1" name="startPeriod"/>
             <input class="input-date" type="datetime-local" id="finishPeriod1" name="finishPeriod"/>
