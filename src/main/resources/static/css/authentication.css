@@ -148,6 +148,7 @@ textarea:focus, input:focus{
     background-color: #f55252;
     border-radius: var(--border-radius);
     width: 315px;
+    text-align: center;
 }
 
 
